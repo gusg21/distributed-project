@@ -53,7 +53,8 @@ namespace DistributedGame
                     velocity.Normalize();
                 velocity *= moveSpeed;
             }
-            
+
+            GamePad.SetVibration(0, 1, 1);
 
             position += velocity;
         }
