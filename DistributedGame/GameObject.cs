@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace DistributedGame
 {
+    /// <summary>
+    /// The basic object of the game
+    /// </summary>
     abstract class GameObject
     {
         public abstract void Update(GameTime gameTime);

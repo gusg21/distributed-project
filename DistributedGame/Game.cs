@@ -17,6 +17,9 @@ namespace DistributedGame
         List<GameObject> objects;
         Player player;
 
+        /// <summary>
+        /// Game, it contains the globals and what not.
+        /// </summary>
         public Game()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -45,7 +48,10 @@ namespace DistributedGame
         {
             base.LoadContent();
         }
-
+        /// <summary>
+        /// Updates all objects
+        /// </summary>
+        /// <param name="gameTime">it's the game time</param>
         protected override void Update(GameTime gameTime)
         {
             foreach (GameObject @object in objects)
@@ -55,10 +61,13 @@ namespace DistributedGame
 
             base.Update(gameTime);
         }
-
+        /// <summary>
+        /// Draw draws all objects
+        /// </summary>
+        /// <param name="gameTime"> it's the game time</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.ForestGreen);
+            GraphicsDevice.Clear(Color.ForestGreen); //Makes the background not red. (clears and makes the background green)
 
             batch.Begin();
             foreach (GameObject @object in objects)
