@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{44F83F0F-173E-481E-B7A4-44C78EB67389}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>DistributedGame</RootNamespace>
+    <AssemblyName>DistributedGame</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FNA">
+      <HintPath>..\..\Midnight\Midnight\FNA.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Game.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="fnalibs\lib64\libFAudio.so" />
+    <None Include="fnalibs\lib64\libmojoshader.so" />
+    <None Include="fnalibs\lib64\libSDL2-2.0.so.0" />
+    <None Include="fnalibs\lib64\libSDL2_image-2.0.so.0" />
+    <None Include="fnalibs\lib64\libtheorafile.so" />
+    <None Include="fnalibs\lib\libFAudio.so" />
+    <None Include="fnalibs\lib\libmojoshader.so" />
+    <None Include="fnalibs\lib\libSDL2-2.0.so.0" />
+    <None Include="fnalibs\lib\libSDL2_image-2.0.so.0" />
+    <None Include="fnalibs\lib\libtheorafile.so" />
+    <None Include="fnalibs\osx\libFAudio.dylib" />
+    <None Include="fnalibs\osx\libmojoshader.dylib" />
+    <None Include="fnalibs\osx\libSDL2-2.0.0.dylib" />
+    <None Include="fnalibs\osx\libSDL2_image-2.0.0.dylib" />
+    <None Include="fnalibs\osx\libtheorafile.dylib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fnalibs\README.txt" />
+    <Content Include="fnalibs\x64\FAudio.dll" />
+    <Content Include="fnalibs\x64\libtheorafile.dll" />
+    <Content Include="fnalibs\x64\MojoShader.dll" />
+    <Content Include="fnalibs\x64\SDL2.dll" />
+    <Content Include="fnalibs\x64\SDL2_image.dll" />
+    <Content Include="fnalibs\x86\FAudio.dll" />
+    <Content Include="fnalibs\x86\libtheorafile.dll" />
+    <Content Include="fnalibs\x86\MojoShader.dll" />
+    <Content Include="fnalibs\x86\SDL2.dll" />
+    <Content Include="fnalibs\x86\SDL2_image.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /y /d  "$(ProjectDir)fnalibs\x64\*.dll" "$(ProjectDir)$(OutDir)"</PostBuildEvent>
+  </PropertyGroup>
+</Project>
