@@ -62,7 +62,8 @@ namespace DistributedGame
                     velocity.Normalize(); //Normalize the velocity so that nobody goes faster on diagonal
                 velocity *= moveSpeed;
             }
-            
+
+            GamePad.SetVibration(0, 1, 1);
 
             position += velocity;
         }
