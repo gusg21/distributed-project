@@ -15,6 +15,8 @@ namespace DistributedGame
         Vector2 position;
         Vector2 velocity;
 
+        float moveSpeed = 3F;
+
         public Player()
         {
             texture = new Texture2D(Global.g, 32, 32);
@@ -40,10 +42,18 @@ namespace DistributedGame
 
         public override void Update(GameTime gameTime)
         {
-            velocity.X = BoolToInt(Keyboard.GetState().IsKeyDown(Keys.D)) - BoolToInt(Keyboard.GetState().IsKeyDown(Keys.A));
-            velocity.Y = BoolToInt(Keyboard.GetState().IsKeyDown(Keys.S)) - BoolToInt(Keyboard.GetState().IsKeyDown(Keys.W));
-            if (velocity != Vector2.Zero)
-                velocity.Normalize();
+            if (GamePad.GetState(0).IsConnected) // Controller input
+            {
+                velocity = GamePad.GetState(0).ThumbSticks.Left * new Vector2(1, -1) * moveSpeed;
+            } else // Keyboard input
+            {
+                velocity.X = BoolToInt(Keyboard.GetState().IsKeyDown(Keys.D)) - BoolToInt(Keyboard.GetState().IsKeyDown(Keys.A));
+                velocity.Y = BoolToInt(Keyboard.GetState().IsKeyDown(Keys.S)) - BoolToInt(Keyboard.GetState().IsKeyDown(Keys.W));
+                if (velocity != Vector2.Zero)
+                    velocity.Normalize();
+                velocity *= moveSpeed;
+            }
+            
 
             position += velocity;
         }
