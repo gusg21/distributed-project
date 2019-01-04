@@ -13,6 +13,14 @@ namespace DistributedGame
         public List<ZObject> children;
 
         /// <summary>
+        /// A group of ZObjects
+        /// </summary>
+        public ZObjectGroup()
+        {
+            children = new List<ZObject>();
+        }
+
+        /// <summary>
         /// Add a ZObject to this group.
         /// </summary>
         /// <param name="child"></param>

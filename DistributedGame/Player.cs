@@ -32,6 +32,8 @@ namespace DistributedGame
                 colors[i * 4 + 3] = 0xFF;
             }
             texture.SetData<byte>(colors);
+
+            z = 1;
         }
 
         /// <summary>

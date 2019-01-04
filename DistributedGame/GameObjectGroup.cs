@@ -11,7 +11,15 @@ namespace DistributedGame
     class GameObjectGroup : GameObject
     {
         public List<GameObject> children;
-        
+
+        /// <summary>
+        /// A simple group of GameObjects
+        /// </summary>
+        public GameObjectGroup()
+        {
+            children = new List<GameObject>();
+        }
+
         /// <summary>
         /// Add a GameObject to the group.
         /// </summary>

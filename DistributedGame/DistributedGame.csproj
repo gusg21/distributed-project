@@ -53,12 +53,14 @@
     <Compile Include="Castle.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GameObject.cs" />
+    <Compile Include="GameObjectGroup.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="Math\SuperRandom.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="ZObject.cs" />
+    <Compile Include="ZObjectGroup.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
