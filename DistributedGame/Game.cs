@@ -14,7 +14,8 @@ namespace DistributedGame
         GraphicsDeviceManager graphics;
         SpriteBatch batch;
 
-        List<GameObject> objects;
+        GameObjectGroup objects;
+        ZObjectGroup zObjects;
         Player player;
 
         /// <summary>
@@ -34,37 +35,37 @@ namespace DistributedGame
 
         protected override void Initialize()
         {
+            // Setup sprite batch
             batch = new SpriteBatch(GraphicsDevice);
 
-            objects = new List<GameObject>();
+            // Create objects
+            objects = new GameObjectGroup();
+            zObjects = new ZObjectGroup();
+            objects.AddChild(zObjects);
 
             player = new Player();
-            objects.Add(player);
+            zObjects.AddChild(player);
 
-            objects.Add(new Castle());
+            zObjects.AddChild(new Castle());
 
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            foreach (GameObject @object in objects)
-            {
-                @object.LoadContent();
-            }
+            objects.LoadContent();
 
             base.LoadContent();
         }
+
         /// <summary>
         /// Updates all objects
         /// </summary>
         /// <param name="gameTime">it's the game time</param>
         protected override void Update(GameTime gameTime)
         {
-            foreach (GameObject @object in objects)
-            {
-                @object.Update(gameTime);
-            }
+            objects.Update(gameTime);
+            zObjects.Sort();
 
             base.Update(gameTime);
         }
@@ -77,10 +78,7 @@ namespace DistributedGame
             GraphicsDevice.Clear(Color.ForestGreen); //Makes the background not red. (clears and makes the background green)
 
             batch.Begin();
-            foreach (GameObject @object in objects)
-            {
-                @object.Draw(batch);
-            }
+            objects.Draw(batch);
             batch.End();
 
             base.Draw(gameTime);

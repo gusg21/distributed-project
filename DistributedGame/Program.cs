@@ -8,6 +8,11 @@ namespace DistributedGame
 {
     class Program
     {
+        /// <summary>
+        /// The Launcher for our game. Just makes a new Game object
+        /// and Run()s it.
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
             Game game = new Game();

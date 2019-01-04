@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DistributedGame
 {
-    class Player : GameObject
+    class Player : ZObject
     {
         Texture2D texture;
         Vector2 position;

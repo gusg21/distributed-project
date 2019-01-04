@@ -8,13 +8,18 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DistributedGame
 {
-    class Castle : GameObject
+    class Castle : ZObject
     {
         Texture2D texture;
         Vector2 position = new Vector2();
 
+        /// <summary>
+        /// Represents a player's castle in-game. This should have no networking, if possible.
+        /// Simply display logic.
+        /// </summary>
         public Castle()
         {
+            // Random position. temporary
             position.X = Global.r.random.Next(0, 100);
             position.Y = Global.r.random.Next(0, 100);
         }
