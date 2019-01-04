@@ -33,6 +33,15 @@ namespace DistributedGame
             }
             texture.SetData<byte>(colors);
         }
+
+        /// <summary>
+        /// Load the texture and stuff. We make our
+        /// own texture (see constructor)
+        /// </summary>
+        public override void LoadContent()
+        {
+        }
+
         /// <summary>
         /// turns a bool into an int, fun!
         /// </summary>
@@ -45,6 +54,7 @@ namespace DistributedGame
             else
                 return 0;
         }
+
         /// <summary>
         /// It updates the player.
         /// </summary>

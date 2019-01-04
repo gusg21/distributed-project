@@ -41,11 +41,18 @@ namespace DistributedGame
             player = new Player();
             objects.Add(player);
 
+            objects.Add(new Castle());
+
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
+            foreach (GameObject @object in objects)
+            {
+                @object.LoadContent();
+            }
+
             base.LoadContent();
         }
         /// <summary>

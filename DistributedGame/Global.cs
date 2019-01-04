@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Content;
+﻿using DistributedGame.Math;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -13,5 +14,6 @@ namespace DistributedGame
         public static ContentManager c;
         public static GraphicsDevice g;
         public static Player p;
+        public static SuperRandom r = new SuperRandom();
     }
 }
