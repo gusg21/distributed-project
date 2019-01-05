@@ -27,11 +27,13 @@ namespace DistributedGame
         public override void LoadContent()
         {
             texture = Global.c.Load<Texture2D>("castle.png");
+
+            depthYOffset = texture.Height;
         }
 
         public override void Update(GameTime gameTime)
         {
-            
+            YZ(this, position);
         }
 
         public override void Draw(SpriteBatch batch)

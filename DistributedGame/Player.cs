@@ -33,7 +33,7 @@ namespace DistributedGame
             }
             texture.SetData<byte>(colors);
 
-            z = 1;
+            depthYOffset = texture.Height;
         }
 
         /// <summary>
@@ -75,9 +75,12 @@ namespace DistributedGame
                 velocity *= moveSpeed;
             }
 
-            GamePad.SetVibration(0, 1, 1);
+            // Example vibration
+            //GamePad.SetVibration(0, 1, 1);
 
             position += velocity;
+
+            YZ(this, position);
         }
 
         public override void Draw(SpriteBatch batch)
