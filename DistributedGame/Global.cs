@@ -1,4 +1,5 @@
 ﻿using DistributedGame.Math;
+using DistributedGame.Networking;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -16,6 +17,11 @@ namespace DistributedGame
         /// USE ONLY IN LoadContent()!
         /// </summary>
         public static ContentManager c;
+        /// <summary>
+        /// An interface with some convenient networking methods
+        /// for talking to the Fun Network King
+        /// </summary>
+        public static FNK fnk;
         /// <summary>
         /// Global Graphics device, easily acessible
         /// </summary>
