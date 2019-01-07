@@ -1,5 +1,6 @@
 ﻿using DistributedGame.Math;
 using DistributedGame.Networking;
+using Humper;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -34,5 +35,9 @@ namespace DistributedGame
         /// The main RNG
         /// </summary>
         public static SuperRandom r = new SuperRandom();
+        /// <summary>
+        /// Physics World
+        /// </summary>
+        public static World w;
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Humper;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -12,6 +13,7 @@ namespace DistributedGame
     {
         Texture2D texture;
         Vector2 position = new Vector2();
+        IBox bbox;
 
         /// <summary>
         /// Represents a player's castle in-game. This should have no networking, if possible.
@@ -27,6 +29,8 @@ namespace DistributedGame
         public override void LoadContent()
         {
             texture = Global.c.Load<Texture2D>("castle.png");
+
+            bbox = Global.w.Create(position.X + 3, position.Y + texture.Height - 8, texture.Width - 6, 8);
 
             depthYOffset = texture.Height;
         }

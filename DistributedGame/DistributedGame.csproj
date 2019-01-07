@@ -40,6 +40,9 @@
     <Reference Include="FNA">
       <HintPath>..\..\Midnight\Midnight\FNA.dll</HintPath>
     </Reference>
+    <Reference Include="Humper">
+      <HintPath>.\Humper.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

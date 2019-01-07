@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Humper;
+using Humper.Responses;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -14,8 +16,11 @@ namespace DistributedGame
         Texture2D texture;
         Vector2 position;
         Vector2 velocity;
+        Vector2 bboxOffset;
+        IBox bbox; 
 
         float moveSpeed = 3F;
+
         /// <summary>
         /// The player plays the game, game object it keeps track of our textures and whatnot
         /// </summary>
@@ -34,6 +39,9 @@ namespace DistributedGame
             texture.SetData<byte>(colors);
 
             depthYOffset = texture.Height;
+
+            bboxOffset = new Vector2(3, texture.Height - 6);
+            bbox = Global.w.Create(position.X + bboxOffset.X, position.Y + bboxOffset.Y, texture.Width - 6, 6);
         }
 
         /// <summary>
@@ -81,6 +89,9 @@ namespace DistributedGame
             position += velocity;
 
             YZ(this, position);
+
+            IMovement result = bbox.Move(position.X + bboxOffset.X, position.Y + bboxOffset.Y, (collision) => CollisionResponses.Slide);
+            position = new Vector2(result.Destination.X - bboxOffset.X, result.Destination.Y - bboxOffset.Y);
         }
 
         public override void Draw(SpriteBatch batch)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Humper;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -13,9 +14,13 @@ namespace DistributedGame
         GameObjectGroup objects;
         ZObjectGroup zObjects;
         Player player;
+        World physicsWorld;
 
         public PlayState()
         {
+            physicsWorld = new World(640, 480);
+            Global.w = physicsWorld;
+
             // Create objects
             objects = new GameObjectGroup();
             zObjects = new ZObjectGroup();
