@@ -14,9 +14,7 @@ namespace DistributedGame
         GraphicsDeviceManager graphics;
         SpriteBatch batch;
 
-        GameObjectGroup objects;
-        ZObjectGroup zObjects;
-        Player player;
+        State currentState;
 
         /// <summary>
         /// Game, it contains the globals and what not.
@@ -30,30 +28,21 @@ namespace DistributedGame
             // Literally the worst design pattern
             Global.c = Content;
             Global.g = GraphicsDevice;
-            Global.p = player;
         }
 
         protected override void Initialize()
         {
+            currentState = new PlayState();
+
             // Setup sprite batch
             batch = new SpriteBatch(GraphicsDevice);
-
-            // Create objects
-            objects = new GameObjectGroup();
-            zObjects = new ZObjectGroup();
-            objects.AddChild(zObjects);
-
-            player = new Player();
-            zObjects.AddChild(player);
-
-            zObjects.AddChild(new Castle());
 
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            objects.LoadContent();
+            currentState.LoadContent();
 
             base.LoadContent();
         }
@@ -64,8 +53,7 @@ namespace DistributedGame
         /// <param name="gameTime">it's the game time</param>
         protected override void Update(GameTime gameTime)
         {
-            objects.Update(gameTime);
-            zObjects.Sort();
+            currentState.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -77,9 +65,7 @@ namespace DistributedGame
         {
             GraphicsDevice.Clear(Color.ForestGreen); //Makes the background not red. (clears and makes the background green)
 
-            batch.Begin();
-            objects.Draw(batch);
-            batch.End();
+            currentState.Draw(batch);
 
             base.Draw(gameTime);
         }
