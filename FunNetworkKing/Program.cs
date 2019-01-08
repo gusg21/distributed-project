@@ -9,12 +9,10 @@ namespace FunNetworkKing
 {
     class Program
     {
-        Socket socket;
-
         static void Main(string[] args)
         {
-            socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
-            
+            FNK fnk = new FNK();
+            fnk.Be
         }
     }
 }

@@ -14,7 +14,7 @@ namespace FunNetworkKing
 
         public void Run()
         {
-            listeningSocket.Bind(new IPEndPoint(new IPAddress(b"localhost"), ));
+            listeningSocket.Bind(new IPEndPoint(new IPAddress(), ));
         }
     }
 }
