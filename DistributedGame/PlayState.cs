@@ -16,7 +16,7 @@ namespace DistributedGame
         Player player;
         World physicsWorld;
 
-        public PlayState()
+        public PlayState(Game game) : base(game)
         {
             physicsWorld = new World(640, 480);
             Global.w = physicsWorld;
@@ -56,6 +56,8 @@ namespace DistributedGame
 
         public override void Draw(SpriteBatch batch)
         {
+            Global.g.Clear(Color.ForestGreen); //Makes the background not red. (clears and makes the background green)
+
             batch.Begin();
             objects.Draw(batch);
             batch.End();

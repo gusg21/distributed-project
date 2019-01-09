@@ -30,7 +30,7 @@ namespace DistributedGame
         {
             texture = Global.c.Load<Texture2D>("castle.png");
 
-            bbox = Global.w.Create(position.X + 3, position.Y + texture.Height - 8, texture.Width - 6, 8);
+            bbox = Global.w.Create(position.X + 9, position.Y + texture.Height - 20, texture.Width - 18, 20);
 
             depthYOffset = texture.Height;
         }
