@@ -23,6 +23,9 @@ namespace DistributedGame
         public Game()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferWidth = 1024;
+            graphics.PreferredBackBufferHeight = 768;
+            graphics.ApplyChanges();
 
             Content.RootDirectory = "Content";
 

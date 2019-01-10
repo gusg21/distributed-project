@@ -11,6 +11,7 @@ namespace DistributedGame
     class FontRenderer
     {
         public static readonly Texture2D A_BUTTON = Global.c.Load<Texture2D>("buttons/a.png");
+        public static readonly Texture2D B_BUTTON = Global.c.Load<Texture2D>("buttons/b.png");
 
         public static void RenderFont(SpriteBatch batch, Font font, string text, Vector2 position)
         {
@@ -65,6 +66,15 @@ namespace DistributedGame
                         skip = true;
                         continue;
                     }
+
+                    if (nextLetter == 'b') // b button
+                    {
+                        localPosition.X += scale;
+                        batch.Draw(B_BUTTON, localPosition, B_BUTTON.Bounds, tint, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
+                        xOffset += (int)(scale * B_BUTTON.Width * 1.25);
+                        skip = true;
+                        continue;
+                    }
                 }
 
                 if (!letter.Equals(' '))
@@ -83,7 +93,7 @@ namespace DistributedGame
     class Font
     {
         public Texture2D Texture { get; private set; }
-        string glyphs;
+        public string glyphs { get; private set; }
         public int glyphWidth { get; private set; }
         public int glyphHeight { get; private set; }
 

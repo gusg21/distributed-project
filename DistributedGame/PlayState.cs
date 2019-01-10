@@ -15,10 +15,11 @@ namespace DistributedGame
         ZObjectGroup zObjects;
         Player player;
         World physicsWorld;
+        Camera camera;
 
         public PlayState(Game game) : base(game)
         {
-            physicsWorld = new World(640, 480);
+            physicsWorld = new World(Global.g.PresentationParameters.BackBufferWidth, Global.g.PresentationParameters.BackBufferHeight);
             Global.w = physicsWorld;
 
             // Create objects
@@ -30,17 +31,24 @@ namespace DistributedGame
             zObjects.AddChild(player);
             Global.p = player;
 
-            zObjects.AddChild(new Castle());
+            camera = new Camera(Global.g.PresentationParameters.BackBufferWidth, Global.g.PresentationParameters.BackBufferHeight, Vector2.Zero)
+            {
+                Zoom = 2F
+            };
+            camera.CenterOn(new Vector2(1024 / 4, 768 / 4));
+            objects.AddChild(camera);
+
+            zObjects.AddChild(new Castle("gusg21"));
         }
 
         public override void Enter()
         {
-            
+            objects.Enter();
         }
 
         public override void Leave()
         {
-            
+            objects.Leave();
         }
 
         public override void LoadContent()
@@ -58,7 +66,7 @@ namespace DistributedGame
         {
             Global.g.Clear(Color.ForestGreen); //Makes the background not red. (clears and makes the background green)
 
-            batch.Begin();
+            batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, camera.TranslationMatrix);
             objects.Draw(batch);
             batch.End();
         }

@@ -19,7 +19,7 @@ namespace DistributedGame
 
         public CreatorState(Game game) : base(game)
         {
-           
+
         }
 
         public void LoadDefaultImage()
@@ -27,7 +27,7 @@ namespace DistributedGame
             texture = Global.c.Load<Texture2D>("defaultplayer.png");
         }
 
-        public override void LoadContent()
+        public void ReloadImage()
         {
             try
             {
@@ -42,10 +42,16 @@ namespace DistributedGame
             {
                 LoadDefaultImage();
             }
+        }
 
-            texturePosition = new Vector2(32, (Global.g.PresentationParameters.BackBufferHeight - texture.Height) / 4);
+        public override void LoadContent()
+        {
+            ReloadImage();
 
-            font = new Font(Global.c.Load<Texture2D>("fonts/font1.png"), "abcdefghijklmnopqrstuvwxyz1234567890:! ", 4, 8);
+            texturePosition = new Vector2(100, (Global.g.PresentationParameters.BackBufferHeight - texture.Height) / 3);
+
+            font = new Font(Global.c.Load<Texture2D>("fonts/font1.png"), "abcdefghijklmnopqrstuvwxyz1234567890:!' ", 4, 8);
+            Global.font = font;
         }
 
         public override void Enter()
@@ -58,11 +64,27 @@ namespace DistributedGame
             
         }
 
+        public void SubmitTexture()
+        {
+            // submit the player's texture
+            Global.playerTexture = texture;
+            SwitchState("play");
+        }
+
         public override void Update(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Z))
             {
-                SwitchState("play");
+                SubmitTexture();
+            }
+            else if (GamePad.GetState(PlayerIndex.One).IsConnected && GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.A))
+            {
+                SubmitTexture();
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.X))
+            {
+                ReloadImage();
             }
         }
 
@@ -71,7 +93,8 @@ namespace DistributedGame
             
             batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
             batch.Draw(texture, texturePosition, texture.Bounds, Color.White, 0, Vector2.Zero, 16, SpriteEffects.None, 0);
-            FontRenderer.RenderFont(batch, font, "press the #a button #nto continue", new Vector2(400, 200));
+            FontRenderer.RenderFont(batch, font, "press the #a button #nto continue", new Vector2(500, 270));
+            FontRenderer.RenderFont(batch, font, "press the #b button #nto reload the image", new Vector2(500, 400));
             batch.End();
         }
     }

@@ -20,7 +20,7 @@ namespace DistributedGame
             myGame.SwitchState(to);
         }
 
-        public abstract void Enter();
-        public abstract void Leave();
+        public abstract override void Enter();
+        public abstract override void Leave();
     }
 }

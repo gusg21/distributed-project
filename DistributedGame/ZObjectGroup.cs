@@ -79,5 +79,21 @@ namespace DistributedGame
                 child.Draw(batch);
             }
         }
+
+        public override void Enter()
+        {
+            foreach (ZObject child in children)
+            {
+                child.Enter();
+            }
+        }
+
+        public override void Leave()
+        {
+            foreach (ZObject child in children)
+            {
+                child.Leave();
+            }
+        }
     }
 }

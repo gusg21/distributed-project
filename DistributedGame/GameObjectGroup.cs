@@ -61,5 +61,21 @@ namespace DistributedGame
                 child.Draw(batch);
             }
         }
+
+        public override void Enter()
+        {
+            foreach (GameObject child in children)
+            {
+                child.Enter();
+            }
+        }
+
+        public override void Leave()
+        {
+            foreach (GameObject child in children)
+            {
+                child.Leave();
+            }
+        }
     }
 }

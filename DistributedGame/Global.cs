@@ -19,12 +19,16 @@ namespace DistributedGame
         /// </summary>
         public static ContentManager c;
         /// <summary>
+        /// The main pixel font
+        /// </summary>
+        public static Font font;
+        /// <summary>
         /// An interface with some convenient networking methods
         /// for talking to the Fun Network King
         /// </summary>
         public static FNK fnk;
         /// <summary>
-        /// Global Graphics device, easily acessible
+        /// Global Graphics device, easily accessible
         /// </summary>
         public static GraphicsDevice g;
         /// <summary>
@@ -35,6 +39,10 @@ namespace DistributedGame
         /// The main RNG
         /// </summary>
         public static SuperRandom r = new SuperRandom();
+        /// <summary>
+        /// The texture of the player
+        /// </summary>
+        public static Texture2D playerTexture;
         /// <summary>
         /// Physics World
         /// </summary>
