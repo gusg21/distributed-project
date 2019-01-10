@@ -61,6 +61,7 @@
     <Compile Include="Math\SuperRandom.cs" />
     <Compile Include="Networking\FNK.cs" />
     <Compile Include="Networking\P2P.cs" />
+    <Compile Include="Networking\Peer.cs" />
     <Compile Include="PlayState.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

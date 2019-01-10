@@ -13,10 +13,10 @@ namespace DistributedGame
         /// and Run()s it.
         /// </summary>
         /// <param name="args"></param>
-        static void Main(string[] args)
+        /*static void Main(string[] args)
         {
             Game game = new Game();
             game.Run();
-        }
+        }*/
     }
 }
