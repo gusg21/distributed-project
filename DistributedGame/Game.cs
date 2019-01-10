@@ -15,6 +15,7 @@ namespace DistributedGame
         SpriteBatch batch;
 
         State currentState;
+        Dictionary<string, State> states;
 
         /// <summary>
         /// Game, it contains the globals and what not.
@@ -22,27 +23,38 @@ namespace DistributedGame
         public Game()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferWidth = 1024;
+            graphics.PreferredBackBufferHeight = 768;
+            graphics.ApplyChanges();
 
             Content.RootDirectory = "Content";
 
             // Literally the worst design pattern
             Global.c = Content;
             Global.g = GraphicsDevice;
+
+            states = new Dictionary<string, State>();
+            states.Add("play", new PlayState(this));
+            states.Add("creator", new CreatorState(this));
+            SwitchState("creator");
         }
 
         protected override void Initialize()
         {
-            currentState = new PlayState();
-
             // Setup sprite batch
             batch = new SpriteBatch(GraphicsDevice);
+
+            IsMouseVisible = true;
 
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            currentState.LoadContent();
+            foreach (State state in states.Values)
+            {
+                state.LoadContent();
+            }
 
             base.LoadContent();
         }
@@ -63,11 +75,19 @@ namespace DistributedGame
         /// <param name="gameTime"> it's the game time</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.ForestGreen); //Makes the background not red. (clears and makes the background green)
-
             currentState.Draw(batch);
 
             base.Draw(gameTime);
+        }
+
+        public void SwitchState(string to)
+        {
+            if (currentState != null)
+            {
+                currentState.Leave();
+            }
+            currentState = states[to];
+            currentState.Enter();
         }
     }
 }

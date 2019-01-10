@@ -14,6 +14,8 @@ namespace DistributedGame
     abstract class GameObject
     {
         public abstract void LoadContent();
+        public abstract void Enter();
+        public abstract void Leave();
         public abstract void Update(GameTime gameTime);
         public abstract void Draw(SpriteBatch batch);
     }

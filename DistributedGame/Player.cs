@@ -14,7 +14,7 @@ namespace DistributedGame
     class Player : ZObject
     {
         Texture2D texture;
-        Vector2 position;
+        Vector2 position = Vector2.Zero;
         Vector2 velocity;
         Vector2 bboxOffset;
         IBox bbox; 
@@ -26,22 +26,7 @@ namespace DistributedGame
         /// </summary>
         public Player()
         {
-            texture = new Texture2D(Global.g, 32, 32);
-
-            byte[] colors = new byte[32 * 32 * 4];
-            for (int i = 0; i < 32 * 32; i++)
-            {
-                colors[i * 4] = 0xFF;
-                colors[i * 4 + 1] = 0x30;
-                colors[i * 4 + 2] = 0x85;
-                colors[i * 4 + 3] = 0xFF;
-            }
-            texture.SetData<byte>(colors);
-
-            depthYOffset = texture.Height;
-
-            bboxOffset = new Vector2(3, texture.Height - 6);
-            bbox = Global.w.Create(position.X + bboxOffset.X, position.Y + bboxOffset.Y, texture.Width - 6, 6);
+            
         }
 
         /// <summary>
@@ -50,6 +35,32 @@ namespace DistributedGame
         /// </summary>
         public override void LoadContent()
         {
+            position = new Vector2(20, 20);
+
+            texture = new Texture2D(Global.g, 16, 16);
+            byte[] colors = new byte[16 * 16 * 4];
+            for (int i = 0; i < 16 * 16; i++)
+            {
+                colors[i * 4] = 0x34;
+                colors[i * 4 + 1] = 0xED;
+                colors[i * 4 + 2] = 0x01;
+                colors[i * 4 + 3] = 0xFF;
+            }
+            texture.SetData(colors);
+        }
+
+        /// <summary>
+        /// Call to set the player up with the texture created in the
+        /// creation state.
+        /// </summary>
+        public void SetupCreatedTexture()
+        {
+            texture = Global.playerTexture;
+
+            depthYOffset = texture.Height;
+
+            bboxOffset = new Vector2(3, texture.Height - 6);
+            bbox = Global.w.Create(position.X + bboxOffset.X, position.Y + bboxOffset.Y, texture.Width - 6, 6);
         }
 
         /// <summary>
@@ -90,13 +101,29 @@ namespace DistributedGame
 
             YZ(this, position);
 
-            IMovement result = bbox.Move(position.X + bboxOffset.X, position.Y + bboxOffset.Y, (collision) => CollisionResponses.Slide);
-            position = new Vector2(result.Destination.X - bboxOffset.X, result.Destination.Y - bboxOffset.Y);
+            if (bbox != null)
+            {
+                IMovement result = bbox.Move(position.X + bboxOffset.X, position.Y + bboxOffset.Y, (collision) => CollisionResponses.Slide);
+                position = new Vector2(result.Destination.X - bboxOffset.X, result.Destination.Y - bboxOffset.Y);
+            }
         }
 
         public override void Draw(SpriteBatch batch)
         {
-            batch.Draw(texture, position, Color.White);
+            if (texture != null)
+            {
+                batch.Draw(texture, position, Color.White);
+            }
+        }
+
+        public override void Enter()
+        {
+            Console.WriteLine("Enter");
+            SetupCreatedTexture();
+        }
+
+        public override void Leave()
+        {
         }
     }
 }
