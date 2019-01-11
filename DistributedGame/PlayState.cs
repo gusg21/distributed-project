@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using DistributedGame.Networking;
 using Humper;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -16,7 +18,7 @@ namespace DistributedGame
         Player player;
         World physicsWorld;
         Camera camera;
-
+        P2P peer;
         public PlayState(Game game) : base(game)
         {
             physicsWorld = new World(Global.g.PresentationParameters.BackBufferWidth, Global.g.PresentationParameters.BackBufferHeight);
@@ -29,7 +31,10 @@ namespace DistributedGame
 
             player = new Player();
             zObjects.AddChild(player);
-            Global.p = player;
+            Global.p = player;      
+            P2P peer = new P2P();
+            Thread server = new Thread(() => peer.Server(8887,"localhost", 8888, "gusg21"));
+            server.Start();
 
             camera = new Camera(Global.g.PresentationParameters.BackBufferWidth, Global.g.PresentationParameters.BackBufferHeight, Vector2.Zero)
             {
@@ -61,7 +66,10 @@ namespace DistributedGame
             objects.Update(gameTime);
             zObjects.Sort();
         }
-
+        public void addPeer(Peer p)
+        {
+            zObjects.AddChild(p);
+        }
         public override void Draw(SpriteBatch batch)
         {
             Global.g.Clear(Color.ForestGreen); //Makes the background not red. (clears and makes the background green)

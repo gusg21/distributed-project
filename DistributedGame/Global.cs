@@ -47,5 +47,9 @@ namespace DistributedGame
         /// Physics World
         /// </summary>
         public static World w;
+        /// <summary>
+        /// peers
+        /// </summary>
+        public static List<Peer> friends;
     }
 }

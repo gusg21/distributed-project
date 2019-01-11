@@ -14,7 +14,7 @@ namespace DistributedGame
     class Player : ZObject
     {
         Texture2D texture;
-        Vector2 position = Vector2.Zero;
+        public Vector2 position { get; private set; } = Vector2.Zero;
         Vector2 velocity;
         Vector2 bboxOffset;
         IBox bbox; 
