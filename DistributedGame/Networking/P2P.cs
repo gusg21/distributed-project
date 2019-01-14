@@ -13,6 +13,7 @@ namespace DistributedGame.Networking
 {
     public class P2P
     {
+        Peer tmpPeer;
         public void Server(int connectPort, string connectIp, int hostPort, string name)
         {
             TcpListener listener = new TcpListener(hostPort);
@@ -35,7 +36,7 @@ namespace DistributedGame.Networking
             Console.WriteLine(rec);
             String[] recPos = rec.Split(',');
             Console.WriteLine(recPos);
-            Peer tmpPeer = new Peer();
+            tmpPeer = new Peer();
             tmpPeer.name = recName;
             tmpPeer.position = new Vector2(float.Parse(recPos[0]), float.Parse(recPos[1]));
             Global.peers.AddChild(tmpPeer);

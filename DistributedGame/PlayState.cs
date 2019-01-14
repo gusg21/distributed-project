@@ -45,6 +45,7 @@ namespace DistributedGame
 
             zObjects.AddChild(new Castle("gusg21"));
 
+            Global.peers = new ZObjectGroup();
             objects.AddChild(Global.peers);
         }
 
