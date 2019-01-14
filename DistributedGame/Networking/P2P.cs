@@ -41,6 +41,7 @@ namespace DistributedGame.Networking
             tmpPeer.position = new Vector2(float.Parse(recPos[0]), float.Parse(recPos[1]));
             Global.peers.AddChild(tmpPeer);
         }
+
         public void Client(int connectPort, int connectIP, Socket socket)
         {
             byte[] send2 = new byte[1024];
