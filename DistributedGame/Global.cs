@@ -51,5 +51,6 @@ namespace DistributedGame
         /// peers
         /// </summary>
         public static ZObjectGroup peers;
+        public static Dictionary<string, int> peerTracker = new Dictionary<string, int>();
     }
 }

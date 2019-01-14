@@ -21,14 +21,11 @@ namespace DistributedGame.Networking
             listener.Start();
             Socket socket = listener.AcceptSocket();
             Stream networkStream = new NetworkStream(socket);
-            List<String> names = new List<string>();
-            names.Add("CARL");
-            names.Add("Murder");
             byte[] send = System.Text.Encoding.ASCII.GetBytes((name));
             socket.Send(send);
             byte[] data = new byte[1024];
             socket.Receive(data);
-            String recName = System.Text.Encoding.ASCII.GetString(data);
+            String recName = System.Text.Encoding.ASCII.GetString(data).ToLower();
             Console.WriteLine(recName);
             byte[] data2 = new byte[1024];
             socket.Receive(data2);
@@ -40,8 +37,13 @@ namespace DistributedGame.Networking
             tmpPeer.name = recName;
             tmpPeer.position = new Vector2(float.Parse(recPos[0]), float.Parse(recPos[1]));
             Global.peers.AddChild(tmpPeer);
+            Global.peerTracker.Add(recName, Global.peers.children.Count);
+            Thread listen = new Thread(() => Listener(8887, "localhost", socket, "gusg21"));
+            listen.Start();
+            Thread client = new Thread(() => Client(8887, "localhost", socket, "gusg21"));
+            client.Start();
         }
-        public void Client(int connectPort, int connectIP, Socket socket)
+        public void Client(int connectPort, string connectIP, Socket socket, string name)
         {
             byte[] send2 = new byte[1024];
             while (true)
@@ -50,6 +52,18 @@ namespace DistributedGame.Networking
                 socket.Send(send2);
                 socket.Send(System.Text.Encoding.ASCII.GetBytes("\n"));
                 Thread.Sleep(1000);
+            }
+        }
+        public void Listener(int connectPort, string connectIP, Socket socket, string name)
+        {
+            byte[] data = new byte[1024];
+            socket.Receive(data);
+            String rec = System.Text.Encoding.ASCII.GetString(data);
+            String[] recSplit = rec.Split(',');
+            switch (recSplit[0]){
+                case "xy":
+                    ((Peer) Global.peers.children[Global.peerTracker[name]]).position = new Vector2(float.Parse(recSplit[1]), float.Parse(recSplit[2]));
+                    break;
             }
         }
         /*
