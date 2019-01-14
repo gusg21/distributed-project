@@ -37,9 +37,8 @@ namespace DistributedGame.Networking
             Console.WriteLine(recPos);
             Peer tmpPeer = new Peer();
             tmpPeer.name = recName;
-            Vector2 pos = new Vector2(float.Parse(recPos[0]), float.Parse(recPos[1]));
-            tmpPeer.position = pos;
-            Global.friends.Add(tmpPeer);
+            tmpPeer.position = new Vector2(float.Parse(recPos[0]), float.Parse(recPos[1]));
+            Global.peers.AddChild(tmpPeer);
         }
         public void Client(int connectPort, int connectIP, Socket socket)
         {

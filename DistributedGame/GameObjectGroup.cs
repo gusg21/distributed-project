@@ -36,7 +36,14 @@ namespace DistributedGame
         {
             foreach (GameObject child in children)
             {
-                child.LoadContent();
+                if (child != null)
+                {
+                    child.LoadContent();
+                }
+                else
+                {
+                    Console.WriteLine("My child hates me");
+                }
             }
         }
 
@@ -47,7 +54,10 @@ namespace DistributedGame
         {
             foreach (GameObject child in children)
             {
-                child.Update(gameTime);
+                if (child != null)
+                {
+                    child.Update(gameTime);
+                }
             }
         }
 
@@ -58,7 +68,10 @@ namespace DistributedGame
         {
             foreach (GameObject child in children)
             {
-                child.Draw(batch);
+                if (child != null)
+                {
+                    child.Draw(batch);
+                }
             }
         }
 
@@ -66,7 +79,10 @@ namespace DistributedGame
         {
             foreach (GameObject child in children)
             {
-                child.Enter();
+                if (child != null)
+                {
+                    child.Enter();
+                }
             }
         }
 

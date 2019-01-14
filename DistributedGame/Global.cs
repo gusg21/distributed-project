@@ -50,6 +50,6 @@ namespace DistributedGame
         /// <summary>
         /// peers
         /// </summary>
-        public static List<Peer> friends;
+        public static ZObjectGroup peers;
     }
 }

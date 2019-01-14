@@ -44,6 +44,8 @@ namespace DistributedGame
             objects.AddChild(camera);
 
             zObjects.AddChild(new Castle("gusg21"));
+
+            objects.AddChild(Global.peers);
         }
 
         public override void Enter()

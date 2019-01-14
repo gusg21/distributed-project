@@ -24,7 +24,6 @@ namespace DistributedGame
 
         public override void Leave()
         {
-            throw new NotImplementedException();
         }
 
         public override void LoadContent()
