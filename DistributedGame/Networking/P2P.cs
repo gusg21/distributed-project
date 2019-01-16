@@ -27,6 +27,7 @@ namespace DistributedGame.Networking
             socket.Receive(data);
             String recName = System.Text.Encoding.ASCII.GetString(data).ToLower();
             Console.WriteLine(recName);
+            recName.Trim();
             byte[] data2 = new byte[1024];
             socket.Receive(data2);
             String rec = System.Text.Encoding.ASCII.GetString(data2);
@@ -48,7 +49,7 @@ namespace DistributedGame.Networking
             byte[] send2 = new byte[1024];
             while (true)
             {
-                send2 = System.Text.Encoding.ASCII.GetBytes((Global.p.position.X.ToString() + "," + Global.p.position.Y.ToString()));
+                send2 = System.Text.Encoding.ASCII.GetBytes("xy," + (Global.p.position.X.ToString() + "," + Global.p.position.Y.ToString()));
                 socket.Send(send2);
                 socket.Send(System.Text.Encoding.ASCII.GetBytes("\n"));
                 //Thread.Sleep(1000);

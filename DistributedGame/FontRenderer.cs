@@ -25,6 +25,7 @@ namespace DistributedGame
 
         public static void RenderFont(SpriteBatch batch, Font font, string text, Vector2 position, int scale, Color tint)
         {
+
             int xOffset = 0, yOffset = 0, index = 0;
             char nextLetter = ' ';
             bool skip = false;
