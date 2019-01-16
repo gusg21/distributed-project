@@ -33,11 +33,13 @@ namespace DistributedGame.Networking
             Console.WriteLine(rec);
             String[] recPos = rec.Split(',');
             Console.WriteLine(recPos);
+
             tmpPeer = new Peer();
             tmpPeer.name = recName;
             tmpPeer.position = new Vector2(float.Parse(recPos[0]), float.Parse(recPos[1]));
             Global.peers.AddChild(tmpPeer);
             Global.peerTracker.Add(recName, Global.peers.children.Count - 1);
+
             Thread listen = new Thread(() => Listener(8887, "localhost", socket, recName));
             listen.Start();
             Thread client = new Thread(() => Client(8887, "localhost", socket, recName));
