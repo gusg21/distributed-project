@@ -100,9 +100,8 @@ namespace DistributedGame.Networking
             byte[] send2 = new byte[1024];
             while (true)
             {
-                send2 = System.Text.Encoding.ASCII.GetBytes("xy," + (Global.p.position.X.ToString() + "," + Global.p.position.Y.ToString()));
+                send2 = System.Text.Encoding.ASCII.GetBytes("xy," + (Global.p.position.X.ToString() + "," + Global.p.position.Y.ToString()) + "\n");
                 socket.Send(send2);
-                socket.Send(System.Text.Encoding.ASCII.GetBytes("\n"));
                 //Thread.Sleep(1000);
             }
         }
@@ -126,7 +125,6 @@ namespace DistributedGame.Networking
                         Console.WriteLine(Global.peerTracker[name]);
                         ((Peer)Global.peers.children[Global.peerTracker[name]]).position = new Vector2(float.Parse(recSplit[1]), float.Parse(recSplit[2]));
                         break;
-
                 }
             }
         }
