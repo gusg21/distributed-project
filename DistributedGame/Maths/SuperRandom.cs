@@ -34,5 +34,14 @@ namespace DistributedGame.Maths
         {
             return random.NextDouble() < chance;
         }
+        public string RandomString(int length)
+        {
+            string s = "";
+            for (int i = 0; i < length; i++){
+                
+                s += random.Next(0, 9).ToString();
+            }
+            return s;
+        }
     }
 }

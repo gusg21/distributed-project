@@ -1,4 +1,4 @@
-﻿using DistributedGame.Math;
+﻿using DistributedGame.Maths;
 using DistributedGame.Networking;
 using Humper;
 using Microsoft.Xna.Framework.Content;
@@ -47,6 +47,7 @@ namespace DistributedGame
         /// Physics World
         /// </summary>
         public static World w;
+        public static string name;
         /// <summary>
         /// peers
         /// </summary>

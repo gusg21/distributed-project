@@ -61,7 +61,7 @@ namespace DistributedGame
 
             font = new Font(Global.c.Load<Texture2D>("fonts/font1.png"), "abcdefghijklmnopqrstuvwxyz1234567890:!' ", 4, 8);
             Global.font = font;
-
+            Global.name = Global.r.RandomString(5);
             boxBox.Insert(0, new Vector2(100, 200));
             boxBox.Insert(1, new Vector2(400, 200));
             boxValue.Insert(0, "8888");
@@ -103,7 +103,7 @@ namespace DistributedGame
             if (Keyboard.GetState().IsKeyDown(Keys.Z))
             {
                 P2P peer = new P2P();
-                Thread server = new Thread(() => peer.Server(0000, "localhost", int.Parse(boxValue[1]), "gusg21"));
+                Thread server = new Thread(() => peer.Server(int.Parse(boxValue[1]), Global.name));
                 server.Start();
                 if (boxValue[0] != null && boxValue[0] != "")
                 {
