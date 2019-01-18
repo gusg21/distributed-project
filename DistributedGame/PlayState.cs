@@ -32,9 +32,7 @@ namespace DistributedGame
             player = new Player();
             zObjects.AddChild(player);
             Global.p = player;      
-            P2P peer = new P2P();
-            Thread server = new Thread(() => peer.Server(8887,"localhost", 8888, "gusg21"));
-            server.Start();
+
 
             camera = new Camera(Global.g.PresentationParameters.BackBufferWidth, Global.g.PresentationParameters.BackBufferHeight, Vector2.Zero)
             {
