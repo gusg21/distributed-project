@@ -1,4 +1,4 @@
-﻿using DistributedGame.Math;
+﻿using DistributedGame.Maths;
 using DistributedGame.Networking;
 using Humper;
 using Microsoft.Xna.Framework.Content;
@@ -13,6 +13,7 @@ namespace DistributedGame
 {
     static class Global
     {
+        public static Camera cam;
         /// <summary>
         /// The global ContentManager
         /// USE ONLY IN LoadContent()!
