@@ -105,11 +105,14 @@ namespace DistributedGame
                 P2P peer = new P2P();
                 Thread server = new Thread(() => peer.Server(0000, "localhost", int.Parse(boxValue[1]), "gusg21"));
                 server.Start();
-                if(int.Parse(boxValue[0]) != 0)
+                if (boxValue[0] != null && boxValue[0] != "")
                 {
-                    Console.WriteLine("doing");
-                    Thread client = new Thread(() => peer.Connector(int.Parse(boxValue[0]), "localhost", "gusg21"));
-                    client.Start();
+                    if (int.Parse(boxValue[0]) != 0)
+                    {
+                        Console.WriteLine("doing");
+                        Thread client = new Thread(() => peer.Connector(int.Parse(boxValue[0]), "localhost", "gusg21"));
+                        client.Start();
+                    }
                 }
                 SubmitTexture();
             }

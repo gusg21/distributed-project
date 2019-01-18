@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,13 +24,15 @@ namespace DistributedGame.Networking
             Socket socket = listener.AcceptSocket();
             Console.WriteLine("New Connection Found");
             Stream networkStream = new NetworkStream(socket);
-            byte[] send = Encoding.ASCII.GetBytes((name));
-            socket.Send(send);
+            Console.WriteLine("netstream");
+
             byte[] data = new byte[1024];
             socket.Receive(data);
+            byte[] send = Encoding.ASCII.GetBytes((name));
+            Console.WriteLine("Got a name");
             string recName = Encoding.ASCII.GetString(data).ToLower();
-            Console.WriteLine(recName);
-            recName.Trim();
+            recName = recName.Trim(' ', '\n', '\0'); socket.Send(send);
+            Console.WriteLine("sent");
             byte[] data2 = new byte[1024];
             socket.Receive(data2);
             string rec = Encoding.ASCII.GetString(data2);
@@ -67,11 +70,12 @@ namespace DistributedGame.Networking
                 Console.WriteLine("Client connected to {0}", connect.RemoteEndPoint.ToString());
                 byte[] send = Encoding.ASCII.GetBytes((name));
                 connect.Send(send);
+                Console.WriteLine("sent");
                 byte[] data = new byte[1024];
-                connect.Receive(data);
+                connect.Receive(data);;
                 string recName = Encoding.ASCII.GetString(data).ToLower();
-                Console.WriteLine(recName);
-                recName.Trim();
+                Console.WriteLine(recName + " is the other's name");
+                recName = recName.Trim(' ', '\n', '\0');
                 byte[] data2 = new byte[1024];
                 connect.Receive(data2);
                 string rec = Encoding.ASCII.GetString(data2);
@@ -100,8 +104,9 @@ namespace DistributedGame.Networking
             byte[] send2 = new byte[1024];
             while (true)
             {
-                send2 = Encoding.ASCII.GetBytes("xy," + (Global.p.position.X.ToString() + "," + Global.p.position.Y.ToString()) + "\n");
+                send2 = Encoding.ASCII.GetBytes("xy," + (Global.p.position.X.ToString() + "," + Global.p.position.Y.ToString()) + "/n");
                 socket.Send(send2);
+                Console.WriteLine(Encoding.ASCII.GetString(send2));
                 //Thread.Sleep(1000);
             }
         }
