@@ -23,18 +23,18 @@ namespace DistributedGame.Networking
             Socket socket = listener.AcceptSocket();
             Console.WriteLine("New Connection Found");
             Stream networkStream = new NetworkStream(socket);
-            byte[] send = System.Text.Encoding.ASCII.GetBytes((name));
+            byte[] send = Encoding.ASCII.GetBytes((name));
             socket.Send(send);
             byte[] data = new byte[1024];
             socket.Receive(data);
-            String recName = System.Text.Encoding.ASCII.GetString(data).ToLower();
+            string recName = Encoding.ASCII.GetString(data).ToLower();
             Console.WriteLine(recName);
             recName.Trim();
             byte[] data2 = new byte[1024];
             socket.Receive(data2);
-            String rec = System.Text.Encoding.ASCII.GetString(data2);
+            string rec = Encoding.ASCII.GetString(data2);
             Console.WriteLine(rec);
-            String[] recPos = rec.Split(',');
+            string[] recPos = rec.Split(',');
             Console.WriteLine(recPos);
 
             tmpPeer = new Peer();
@@ -65,18 +65,18 @@ namespace DistributedGame.Networking
             //{
                 connect.Connect(ipEndpoint);
                 Console.WriteLine("Client connected to {0}", connect.RemoteEndPoint.ToString());
-                byte[] send = System.Text.Encoding.ASCII.GetBytes((name));
+                byte[] send = Encoding.ASCII.GetBytes((name));
                 connect.Send(send);
                 byte[] data = new byte[1024];
                 connect.Receive(data);
-                String recName = System.Text.Encoding.ASCII.GetString(data).ToLower();
+                string recName = Encoding.ASCII.GetString(data).ToLower();
                 Console.WriteLine(recName);
                 recName.Trim();
                 byte[] data2 = new byte[1024];
                 connect.Receive(data2);
-                String rec = System.Text.Encoding.ASCII.GetString(data2);
+                string rec = Encoding.ASCII.GetString(data2);
                 Console.WriteLine(rec);
-                String[] recPos = rec.Split(',');
+                string[] recPos = rec.Split(',');
                 Console.WriteLine(recPos);
                 tmpPeer = new Peer();
                 tmpPeer.name = recName;
@@ -100,7 +100,7 @@ namespace DistributedGame.Networking
             byte[] send2 = new byte[1024];
             while (true)
             {
-                send2 = System.Text.Encoding.ASCII.GetBytes("xy," + (Global.p.position.X.ToString() + "," + Global.p.position.Y.ToString()) + "\n");
+                send2 = Encoding.ASCII.GetBytes("xy," + (Global.p.position.X.ToString() + "," + Global.p.position.Y.ToString()) + "\n");
                 socket.Send(send2);
                 //Thread.Sleep(1000);
             }
@@ -112,8 +112,8 @@ namespace DistributedGame.Networking
             {
                 byte[] data = new byte[1024];
                 socket.Receive(data);
-                String rec = System.Text.Encoding.ASCII.GetString(data);
-                String[] recSplit = rec.Split(',');
+                string rec = Encoding.ASCII.GetString(data);
+                string[] recSplit = rec.Split(',');
                 switch (recSplit[0])
                 {
                     case "xy":
