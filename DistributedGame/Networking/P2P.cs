@@ -35,7 +35,7 @@ namespace DistributedGame.Networking
             Console.WriteLine(recPos);
 
             tmpPeer = new Peer();
-            tmpPeer.name = recName;
+            tmpPeer.name = recName.Trim();
             tmpPeer.position = new Vector2(float.Parse(recPos[0]), float.Parse(recPos[1]));
             Global.peers.AddChild(tmpPeer);
             Global.peerTracker.Add(recName, Global.peers.children.Count - 1);

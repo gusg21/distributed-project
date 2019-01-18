@@ -22,6 +22,11 @@ namespace DistributedGame
 
         float moveSpeed = 3F;
 
+        public Peer()
+        {
+            LoadContent();
+        }
+
         public override void Leave()
         {
         }
