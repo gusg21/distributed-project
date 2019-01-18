@@ -104,8 +104,14 @@ namespace DistributedGame
             if (Keyboard.GetState().IsKeyDown(Keys.Z))
             {
                 P2P peer = new P2P();
-                Thread server = new Thread(() => peer.Server(int.Parse(boxValue[1]), "localhost", 8887, "gusg21"));
+                Thread server = new Thread(() => peer.Server(0000, "localhost", int.Parse(boxValue[1]), "gusg21"));
                 server.Start();
+                if(int.Parse(boxValue[0]) != 0)
+                {
+                    Console.WriteLine("doing");
+                    Thread client = new Thread(() => peer.Connector(int.Parse(boxValue[0]), "localhost", "gusg21"));
+                    client.Start();
+                }
                 SubmitTexture();
             }
             else if (GamePad.GetState(PlayerIndex.One).IsConnected && GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.A))
@@ -163,6 +169,9 @@ namespace DistributedGame
             batch.Draw(textbox, new Vector2(400, 200), Color.White);
             FontRenderer.RenderFont(batch, font, boxValue[0], boxBox[0], 4, Color.Black);
             FontRenderer.RenderFont(batch, font, boxValue[1], boxBox[1], 4, Color.Black);
+            FontRenderer.RenderFont(batch, font, "connect", new Vector2(100, 150), 4, Color.White);
+            FontRenderer.RenderFont(batch, font, "host", new Vector2(400, 150), 4, Color.White);
+
             batch.End();
         }
     }

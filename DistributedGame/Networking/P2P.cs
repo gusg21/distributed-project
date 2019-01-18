@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -20,6 +21,7 @@ namespace DistributedGame.Networking
             Console.WriteLine("Up");
             listener.Start();
             Socket socket = listener.AcceptSocket();
+            Console.WriteLine("New Connection Found");
             Stream networkStream = new NetworkStream(socket);
             byte[] send = System.Text.Encoding.ASCII.GetBytes((name));
             socket.Send(send);
@@ -46,6 +48,53 @@ namespace DistributedGame.Networking
             Thread client = new Thread(() => Client(8887, "localhost", socket, recName));
             client.Start();
         }
+
+        public void Connector(int connectPort, string connectIP, string name)
+        {
+            if(connectIP == "localhost")
+            {
+                connectIP = "127.0.0.1";
+            }
+            IPAddress ipAdress = IPAddress.Parse(connectIP);
+            Console.WriteLine(ipAdress);
+            IPEndPoint ipEndpoint = new IPEndPoint(ipAdress, connectPort);
+            Console.WriteLine(ipEndpoint.ToString());
+            Socket connect = new Socket(ipAdress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+
+            //try
+            //{
+                connect.Connect(ipEndpoint);
+                Console.WriteLine("Client connected to {0}", connect.RemoteEndPoint.ToString());
+                byte[] send = System.Text.Encoding.ASCII.GetBytes((name));
+                connect.Send(send);
+                byte[] data = new byte[1024];
+                connect.Receive(data);
+                String recName = System.Text.Encoding.ASCII.GetString(data).ToLower();
+                Console.WriteLine(recName);
+                recName.Trim();
+                byte[] data2 = new byte[1024];
+                connect.Receive(data2);
+                String rec = System.Text.Encoding.ASCII.GetString(data2);
+                Console.WriteLine(rec);
+                String[] recPos = rec.Split(',');
+                Console.WriteLine(recPos);
+                tmpPeer = new Peer();
+                tmpPeer.name = recName;
+                tmpPeer.position = new Vector2(float.Parse(recPos[0]), float.Parse(recPos[1]));
+                Global.peers.AddChild(tmpPeer);
+                Global.peerTracker.Add(recName, Global.peers.children.Count - 1);
+
+                Thread listen = new Thread(() => Listener(8887, "localhost", connect, recName));
+                listen.Start();
+                Thread client = new Thread(() => Client(8887, "localhost", connect, recName));
+                client.Start();
+            /*}
+            catch
+            {*/
+                Console.WriteLine("It broke.");
+            //}
+        }
+
         public void Client(int connectPort, string connectIP, Socket socket, string name)
         {
             byte[] send2 = new byte[1024];
@@ -59,6 +108,7 @@ namespace DistributedGame.Networking
         }
         public void Listener(int connectPort, string connectIP, Socket socket, string name)
         {
+            Console.WriteLine("Started Listening ");
             while (2+2 == 4)
             {
                 byte[] data = new byte[1024];
