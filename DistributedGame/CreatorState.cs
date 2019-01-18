@@ -2,13 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-<<<<<<< HEAD
-using System.Threading.Tasks;
-=======
 using System.Threading;
 using System.Threading.Tasks;
 using DistributedGame.Networking;
->>>>>>> 900f7c42b917b21d346c07afc14a3672aaac9c87
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -20,14 +16,6 @@ namespace DistributedGame
     {
         Texture2D texture;
         Vector2 texturePosition;
-<<<<<<< HEAD
-
-        Font font;
-
-        public CreatorState(Game game) : base(game)
-        {
-
-=======
         Texture2D textbox;
 
         P2P peer;
@@ -41,7 +29,6 @@ namespace DistributedGame
 
         public CreatorState(Game game) : base(game)
         {
->>>>>>> 900f7c42b917b21d346c07afc14a3672aaac9c87
         }
 
         public void LoadDefaultImage()
@@ -74,9 +61,6 @@ namespace DistributedGame
 
             font = new Font(Global.c.Load<Texture2D>("fonts/font1.png"), "abcdefghijklmnopqrstuvwxyz1234567890:!' ", 4, 8);
             Global.font = font;
-<<<<<<< HEAD
-=======
-
 
             boxBox.Insert(0, new Vector2(100, 200));
             boxBox.Insert(1, new Vector2(400, 200));
@@ -95,7 +79,6 @@ namespace DistributedGame
 
             textbox = new Texture2D(Global.g, width, height);
             textbox.SetData(colors);
->>>>>>> 900f7c42b917b21d346c07afc14a3672aaac9c87
         }
 
         public override void Enter()
@@ -119,8 +102,6 @@ namespace DistributedGame
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Z))
             {
-<<<<<<< HEAD
-=======
                 P2P peer = new P2P();
                 Thread server = new Thread(() => peer.Server(0000, "localhost", int.Parse(boxValue[1]), "gusg21"));
                 server.Start();
@@ -130,7 +111,6 @@ namespace DistributedGame
                     Thread client = new Thread(() => peer.Connector(int.Parse(boxValue[0]), "localhost", "gusg21"));
                     client.Start();
                 }
->>>>>>> 900f7c42b917b21d346c07afc14a3672aaac9c87
                 SubmitTexture();
             }
             else if (GamePad.GetState(PlayerIndex.One).IsConnected && GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.A))
@@ -142,8 +122,6 @@ namespace DistributedGame
             {
                 ReloadImage();
             }
-<<<<<<< HEAD
-=======
             KeyboardState kbState = Keyboard.GetState();
             Keys[] pressedKeys = kbState.GetPressedKeys();
 
@@ -175,18 +153,10 @@ namespace DistributedGame
             }
             Console.WriteLine(boxValue[target]);
             lastPressedKey = pressedKeys;
->>>>>>> 900f7c42b917b21d346c07afc14a3672aaac9c87
         }
 
         public override void Draw(SpriteBatch batch)
         {
-<<<<<<< HEAD
-            
-            batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
-            batch.Draw(texture, texturePosition, texture.Bounds, Color.White, 0, Vector2.Zero, 16, SpriteEffects.None, 0);
-            FontRenderer.RenderFont(batch, font, "press the #a button #nto continue", new Vector2(500, 270));
-            FontRenderer.RenderFont(batch, font, "press the #b button #nto reload the image", new Vector2(500, 400));
-=======
             Global.g.Clear(Color.Black);
 
             batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
@@ -201,7 +171,6 @@ namespace DistributedGame
             FontRenderer.RenderFont(batch, font, "connect", new Vector2(100, 150), 4, Color.White);
             FontRenderer.RenderFont(batch, font, "host", new Vector2(400, 150), 4, Color.White);
 
->>>>>>> 900f7c42b917b21d346c07afc14a3672aaac9c87
             batch.End();
         }
     }
