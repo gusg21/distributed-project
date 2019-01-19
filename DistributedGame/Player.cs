@@ -14,9 +14,12 @@ namespace DistributedGame
     class Player : ZObject
     {
         Texture2D texture;
+        Texture2D lanceTexture;
+        Vector2 lanceOffset = new Vector2(8, 7);
         public Vector2 position { get; private set; } = Vector2.Zero;
         Vector2 velocity;
         Vector2 bboxOffset;
+        public float rotation;
         IBox bbox; 
 
         float moveSpeed = 3F;
@@ -37,16 +40,8 @@ namespace DistributedGame
         {
             position = new Vector2(20, 20);
 
-            texture = new Texture2D(Global.g, 16, 16);
-            byte[] colors = new byte[16 * 16 * 4];
-            for (int i = 0; i < 16 * 16; i++)
-            {
-                colors[i * 4] = 0x34;
-                colors[i * 4 + 1] = 0xED;
-                colors[i * 4 + 2] = 0x01;
-                colors[i * 4 + 3] = 0xFF;
-            }
-            texture.SetData(colors);
+            texture = GenerateRectangle(16, 16, Color.Aquamarine);
+            lanceTexture = GenerateRectangle(24, 2, Color.Tomato);
         }
 
         /// <summary>
@@ -106,13 +101,26 @@ namespace DistributedGame
                 IMovement result = bbox.Move(position.X + bboxOffset.X, position.Y + bboxOffset.Y, (collision) => CollisionResponses.Slide);
                 position = new Vector2(result.Destination.X - bboxOffset.X, result.Destination.Y - bboxOffset.Y);
             }
+
+            rotation = (float) Math.Atan2(Mouse.GetState().Y / Global.cam.Zoom - position.Y, Mouse.GetState().X / Global.cam.Zoom - position.X);
+        }
+
+        public Vector2 GetCenter()
+        {
+            return position + new Vector2(texture.Bounds.Center.X, texture.Bounds.Center.Y);
+        }
+
+        float VectorToAngle(Vector2 vector)
+        {
+            return (float)Math.Atan2(vector.Y, vector.X);
         }
 
         public override void Draw(SpriteBatch batch)
         {
-            if (texture != null)
+            if (texture != null && lanceTexture != null)
             {
-                batch.Draw(texture, position, Color.White);
+                batch.Draw(texture, position, texture.Bounds, Color.White, rotation, new Vector2(8, 8), 1, SpriteEffects.None, 0);
+                batch.Draw(lanceTexture, position, lanceTexture.Bounds, Color.White, rotation, new Vector2(0, 1), 1, SpriteEffects.None, 0);
             }
         }
 
@@ -124,6 +132,22 @@ namespace DistributedGame
 
         public override void Leave()
         {
+        }
+
+        public static Texture2D GenerateRectangle(int width, int height, Color color)
+        {
+            Texture2D texture = new Texture2D(Global.g, width, height);
+            byte[] colors = new byte[width * height * 4];
+            for (int i = 0; i < width * height; i++)
+            {
+                colors[i * 4] = color.R;
+                colors[i * 4 + 1] = color.G;
+                colors[i * 4 + 2] = color.B;
+                colors[i * 4 + 3] = color.A;
+            }
+            texture.SetData(colors);
+
+            return texture;
         }
     }
 }

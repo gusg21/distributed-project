@@ -13,6 +13,7 @@ namespace DistributedGame
 {
     static class Global
     {
+        public static Camera cam;
         /// <summary>
         /// The global ContentManager
         /// USE ONLY IN LoadContent()!

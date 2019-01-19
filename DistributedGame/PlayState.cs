@@ -40,6 +40,7 @@ namespace DistributedGame
             };
             camera.CenterOn(new Vector2(1024 / 4, 768 / 4));
             objects.AddChild(camera);
+            Global.cam = camera;
 
             zObjects.AddChild(new Castle("gusg21"));
 
