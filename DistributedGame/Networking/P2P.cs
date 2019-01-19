@@ -88,7 +88,7 @@ namespace DistributedGame.Networking
                 case "pos":
                 case "position":
                 case "xy":
-                    send2 = Encoding.ASCII.GetBytes("xy," + (Global.p.position.X.ToString() + "," + Global.p.position.Y.ToString()));
+                    send2 = Encoding.ASCII.GetBytes("xy," + (Global.p.position.X.ToString() + "," + Global.p.position.Y.ToString() + "," + Global.p.rotation));
                     socket.Send(send2);
                     //Console.WriteLine(Encoding.ASCII.GetString(send2));
                     break;
@@ -115,6 +115,7 @@ namespace DistributedGame.Networking
                     Console.WriteLine(Global.peerTracker[name]);
                     Console.WriteLine(rec + " REC");
                     ((Peer)Global.peers.children[Global.peerTracker[name]]).position = new Vector2(float.Parse(recSplit[1]), float.Parse(recSplit[2]));
+                    //((Peer)Global.peers.children[Global.peerTracker[name]]) ;
                     break;
             }
         }
