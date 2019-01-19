@@ -90,18 +90,23 @@ namespace DistributedGame.Networking
                 case "xy":
                     send2 = Encoding.ASCII.GetBytes("xy," + (Global.p.position.X.ToString() + "," + Global.p.position.Y.ToString()));
                     socket.Send(send2);
-                    Console.WriteLine(Encoding.ASCII.GetString(send2));
+                    //Console.WriteLine(Encoding.ASCII.GetString(send2));
                     break;
             }
         }
         private void Receive(Socket socket, string name)
         {
             byte[] data = new byte[1024];
+            socket.Receive(data);
             string rec = Encoding.ASCII.GetString(data);
-            string[] recSplit = rec.Split(',');
+            Console.WriteLine(rec);
+            rec = rec.Trim(' ', '\n', '\0');
+            List<string> recSplit = rec.Split(',').ToList<string>();
+            //Console.WriteLine(recSplit[0] + "RECSPLIT");
             switch (recSplit[0])
             {
                 case "xy":
+                    Console.WriteLine("Rec.");
                     foreach (KeyValuePair<string, int> key in Global.peerTracker)
                     {
                         Console.WriteLine("Key = {0}, Value = {1}", key.Key, key.Value);
