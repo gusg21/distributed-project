@@ -106,16 +106,16 @@ namespace DistributedGame.Networking
             switch (recSplit[0])
             {
                 case "xy":
-                    Console.WriteLine("Rec.");
+                    /*Console.WriteLine("Rec.");
                     foreach (KeyValuePair<string, int> key in Global.peerTracker)
                     {
                         Console.WriteLine("Key = {0}, Value = {1}", key.Key, key.Value);
                     }
                     Console.WriteLine(name);
                     Console.WriteLine(Global.peerTracker[name]);
-                    Console.WriteLine(rec + " REC");
+                    Console.WriteLine(rec + " REC");*/
                     ((Peer)Global.peers.children[Global.peerTracker[name]]).position = new Vector2(float.Parse(recSplit[1]), float.Parse(recSplit[2]));
-                    //((Peer)Global.peers.children[Global.peerTracker[name]]) ;
+                    ((Peer)Global.peers.children[Global.peerTracker[name]]).rotation = float.Parse(recSplit[3]);
                     break;
             }
         }
