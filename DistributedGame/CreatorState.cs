@@ -106,13 +106,15 @@ namespace DistributedGame
                 Global.host = int.Parse(boxValue[1]);
                 Thread server = new Thread(() => peer.Listener(Global.host, Global.name));
                 server.Start();
+                Thread client = new Thread(() => peer.Client());
+                client.Start();
                 if (boxValue[0] != null && boxValue[0] != "")
                 {
                     if (int.Parse(boxValue[0]) != 0)
                     {
                         Console.WriteLine("doing");
-                        Thread client = new Thread(() => peer.Connector(int.Parse(boxValue[0]), "localhost", Global.name));
-                        client.Start();
+                        Thread connector = new Thread(() => peer.Connector(int.Parse(boxValue[0]), "localhost", Global.name));
+                        connector.Start();
                     }
                 }
                 SubmitTexture();

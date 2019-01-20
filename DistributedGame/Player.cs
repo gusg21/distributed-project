@@ -1,4 +1,5 @@
-﻿using Humper;
+﻿using DistributedGame.Networking;
+using Humper;
 using Humper.Responses;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -103,6 +104,7 @@ namespace DistributedGame
             }
 
             rotation = (float) Math.Atan2(Mouse.GetState().Y / Global.cam.Zoom - position.Y, Mouse.GetState().X / Global.cam.Zoom - position.X);
+            Global.packets.Add(new Packet("pos", new List<string> { Math.Round(position.X, 2).ToString(), Math.Round(position.Y, 2).ToString(), Math.Round(rotation, 2).ToString() }));
         }
 
         public Vector2 GetCenter()
