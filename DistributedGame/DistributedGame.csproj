@@ -66,6 +66,7 @@
     <Compile Include="GameObjectGroup.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="Maths\SuperRandom.cs" />
+    <Compile Include="Networking\Packet.cs" />
     <Compile Include="Networking\FNK.cs" />
     <Compile Include="Networking\P2P.cs" />
     <Compile Include="Networking\Peer.cs" />

@@ -17,6 +17,8 @@ namespace DistributedGame
         Texture2D lanceTex;
         public Vector2 position { get; set; } = Vector2.Zero;
         Vector2 velocity;
+        public int port { get; set; }
+
         Vector2 bboxOffset;
         //IBox bbox;
         public string name { get; set; } = "JOE";

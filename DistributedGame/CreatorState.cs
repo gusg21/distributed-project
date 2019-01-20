@@ -103,14 +103,15 @@ namespace DistributedGame
             if (Keyboard.GetState().IsKeyDown(Keys.Z))
             {
                 P2P peer = new P2P();
-                Thread server = new Thread(() => peer.Server(int.Parse(boxValue[1]), Global.name));
+                Global.host = int.Parse(boxValue[1]);
+                Thread server = new Thread(() => peer.Server(Global.host, Global.name));
                 server.Start();
                 if (boxValue[0] != null && boxValue[0] != "")
                 {
                     if (int.Parse(boxValue[0]) != 0)
                     {
                         Console.WriteLine("doing");
-                        Thread client = new Thread(() => peer.Connector(int.Parse(boxValue[0]), "localhost", "gusg21"));
+                        Thread client = new Thread(() => peer.Connector(int.Parse(boxValue[0]), "localhost", Global.name));
                         client.Start();
                     }
                 }
