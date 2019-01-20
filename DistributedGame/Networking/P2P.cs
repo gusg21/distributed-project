@@ -13,28 +13,55 @@ using System.Threading.Tasks;
 
 namespace DistributedGame.Networking
 {
+    /// <summary>
+    /// Handles all of the inter-peer networking
+    /// </summary>
     public class P2P
     {
         Peer tmpPeer;
-        Packet positionPacket = new Packet("pos");
+        Packet positionPacket = new Packet("pos"); //A simple packet to update position
         List<Socket> sockets = new List<Socket>();
-        public void Server(int hostPort, string name)
+
+        /// <summary>
+        /// Listener listens on the host port for any incoming connections and creates the socket before passing it off to the Handshaker.
+        /// </summary>
+        /// <param name="hostPort"></param>
+        /// <param name="name"></param>
+        public void Listener(int hostPort, string name)
         {
             TcpListener listener = new TcpListener(hostPort);
             while (3 == 3)
             {
                 Console.WriteLine("Up");
-                listener.Start();
-                Socket socket = listener.AcceptSocket();
-                Console.WriteLine("New Connection Found");
-                Stream networkStream = new NetworkStream(socket);
-                Console.WriteLine("netstream");
+                try
+                {
+                    listener.Start();
 
-                Thread server = new Thread(() => Listener(socket));
-                server.Start(); ; //Thread this
+                    Socket socket = listener.AcceptSocket();
+                    Console.WriteLine("New Connection Found");
+                    Stream networkStream = new NetworkStream(socket);
+                    Console.WriteLine("netstream");
+
+                    Thread server = new Thread(() => Handshaker(socket));
+                    server.Start(); ; //Thread this
+                }
+                catch
+                {
+                    hostPort ++;
+                    Console.WriteLine("port taken trying " + hostPort.ToString());
+
+                    listener = new TcpListener(hostPort);
+                }
+
             }
         }
-
+        /// <summary>
+        /// The connector handles connecting to a new peer as well as the inital handshake between them.
+        /// </summary>
+        /// <param name="connectPort">The port to connect on</param>
+        /// <param name="connectIP">The IP to connect to</param>
+        /// <param name="name">The name to introduce ones self as</param>
+        /// <param name="known">Have we been refered to this peer by an existing freind?</param>
         public void Connector(int connectPort, string connectIP, string name, bool known = false)
         {
             if (connectIP == "localhost")
@@ -71,7 +98,7 @@ namespace DistributedGame.Networking
 
             Global.peerTracker.Add(recName, Global.peers.children.Count - 1);
             Thread listener = new Thread(() => Receiver(connect, recName));
-            Thread client = new Thread(() => Client(8887, "localhost", connect, recName));
+            Thread client = new Thread(() => Client(connect));
 
             listener.Start();
             client.Start();
@@ -82,8 +109,11 @@ namespace DistributedGame.Networking
             //Console.WriteLine("It broke.");
             //}
         }
-
-        public void Client(int connectPort, string connectIP, Socket socket, string name)
+        /// <summary>
+        /// The Client sends all packets waiting to be sent and sends the position update packet.
+        /// </summary>
+        /// <param name="socket">The socket to send on</param>
+        public void Client(Socket socket)
         {
             while (true)
             {
@@ -100,6 +130,11 @@ namespace DistributedGame.Networking
 
             }
         }
+        /// <summary>
+        /// Send does the parsing of the socket, determines what kind of packet it is and processes it before sending.
+        /// </summary>
+        /// <param name="socket">The socket to send on</param>
+        /// <param name="packet">The Packet to be sent</param>
         private void Send(Socket socket, Packet packet)
         {
             byte[] send2 = new byte[1024];
@@ -109,7 +144,7 @@ namespace DistributedGame.Networking
                 case "pos":
                 case "position":
                 case "xy":
-                    processString = "xy," + (Global.p.position.X.ToString() + "," + Global.p.position.Y.ToString() + "," + Global.p.rotation + "|");
+                    processString = "xy," + (Math.Round(Global.p.position.X,2).ToString() + "," + Math.Round(Global.p.position.Y, 2).ToString() + "," + Math.Round(Global.p.rotation, 2) + "|");
                     //Console.WriteLine(Encoding.ASCII.GetString(send2));
                     break;
                 case "hit":
@@ -123,6 +158,11 @@ namespace DistributedGame.Networking
             send2 = Encoding.ASCII.GetBytes(processString);
             socket.Send(send2);
         }
+        /// <summary>
+        /// Receive on socket and process data for a named peer.
+        /// </summary>
+        /// <param name="socket">The socket to receive on</param>
+        /// <param name="name">The name of the Peer you are processing for</param>
         private void Receive(Socket socket, string name)
         {
             while (true)
@@ -173,6 +213,11 @@ namespace DistributedGame.Networking
                 }
             }
         }
+        /// <summary>
+        /// A loop for the Receive function.
+        /// </summary>
+        /// <param name="socket"></param>
+        /// <param name="name"></param>
         private void Receiver(Socket socket, string name)
         {
             while (true)
@@ -180,7 +225,11 @@ namespace DistributedGame.Networking
                 Receive(socket, name);
             }
         }
-        public void Listener(Socket socket)
+        /// <summary>
+        /// Preforms the inital steps for establishing a connection.
+        /// </summary>
+        /// <param name="socket"></param>
+        public void Handshaker(Socket socket)
         {
             byte[] data = new byte[1024];
             socket.Receive(data);
@@ -200,7 +249,7 @@ namespace DistributedGame.Networking
             Global.peers.AddChild(tmpPeer);
             Console.WriteLine(Global.peers.children.Count.ToString());
             Global.peerTracker.Add(recName, Global.peers.children.Count - 1);
-            if (int.Parse(process[2].Trim()) != 1)
+            if (int.Parse(process[2].Trim()) != 1) //Checking if the connecting peer "knows" the listener (was directed to connect by someone else, rather than a new connection)
             {
                 foreach (Socket s in sockets)
                 {
@@ -209,7 +258,7 @@ namespace DistributedGame.Networking
             }
             Console.WriteLine("intro," + ((IPEndPoint)socket.RemoteEndPoint).Address.ToString() + "," + tmpPeer.port.ToString());
             //Receive(socket, recName);
-            Thread client = new Thread(() => Client(8887, "localhost", socket, recName));
+            Thread client = new Thread(() => Client(socket));
             Thread listener = new Thread(() => Receiver(socket, recName));
             listener.Start();
             client.Start();

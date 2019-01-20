@@ -104,7 +104,7 @@ namespace DistributedGame
             {
                 P2P peer = new P2P();
                 Global.host = int.Parse(boxValue[1]);
-                Thread server = new Thread(() => peer.Server(Global.host, Global.name));
+                Thread server = new Thread(() => peer.Listener(Global.host, Global.name));
                 server.Start();
                 if (boxValue[0] != null && boxValue[0] != "")
                 {

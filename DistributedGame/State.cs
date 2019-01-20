@@ -14,7 +14,10 @@ namespace DistributedGame
         {
             myGame = game;
         }
-
+        /// <summary>
+        /// Switches the gamestate
+        /// </summary>
+        /// <param name="to">new state</param>
         public void SwitchState(string to)
         {
             myGame.SwitchState(to);

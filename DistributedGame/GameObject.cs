@@ -16,7 +16,15 @@ namespace DistributedGame
         public abstract void LoadContent();
         public abstract void Enter();
         public abstract void Leave();
+        /// <summary>
+        /// Is called while running to update everything
+        /// </summary>
+        /// <param name="gameTime"></param>
         public abstract void Update(GameTime gameTime);
+        /// <summary>
+        /// Is called at the end to draw.
+        /// </summary>
+        /// <param name="batch"></param>
         public abstract void Draw(SpriteBatch batch);
     }
 }

@@ -53,8 +53,17 @@ namespace DistributedGame
         /// peers
         /// </summary>
         public static ZObjectGroup peers;
+        /// <summary>
+        /// A mapping of peers to an id number
+        /// </summary>
         public static Dictionary<string, int> peerTracker = new Dictionary<string, int>();
+        /// <summary>
+        /// list of packets to send
+        /// </summary>
         public static List<Packet> packets = new List<Packet>();
+        /// <summary>
+        /// The port that is being hosted
+        /// </summary>
         public static int host;
     }
 }
