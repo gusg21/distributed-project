@@ -94,6 +94,7 @@ namespace DistributedGame.Networking
             tmpPeer.name = recName;
             tmpPeer.position = new Vector2(0, 0);
             tmpPeer.port = int.Parse(process[1].Trim(' ', '\n', '\0'));
+            tmpPeer.socket = connect;
 
             Global.peers.AddChild(tmpPeer);
 
@@ -103,7 +104,7 @@ namespace DistributedGame.Networking
 
             listener.Start();
            // client.Start();
-            sockets.Add(connect);
+            //sockets.Add(connect);
             /*}
             catch
             {*/
@@ -122,10 +123,10 @@ namespace DistributedGame.Networking
                 {
                     Packet packet = Global.packets[0];
                     ///byte[] send2 = new byte[1024];
-                    for(int i = 0; i < sockets.Count(); i++)
+                    for(int i = 0; i < Global.peers.children.Count(); i++)
                     {
-                        Socket sock = sockets[i];
-                        Send(sock, packet);
+                        Socket sock = ((Peer)Global.peers.children[i]).socket;
+                        Send((Peer)(Global.peers.children[i]), packet);
                     }
                     Global.packets.RemoveAt(0);
                 }
@@ -139,10 +140,11 @@ namespace DistributedGame.Networking
         /// </summary>
         /// <param name="socket">The socket to send on</param>
         /// <param name="packet">The Packet to be sent</param>
-        private void Send(Socket socket, Packet packet)
+        private void Send(Peer peer, Packet packet)
         {
             byte[] send2 = new byte[1024];
             string processString = "";
+            Socket socket = peer.socket;
             switch (packet.send)
             {
                 case "pos":
@@ -155,7 +157,7 @@ namespace DistributedGame.Networking
                     processString = "hit";
                     break;
                 case "intro":
-                    processString = "intro," + packet.value[0].ToString().Trim('(',')')+ "," + packet.value[1].ToString().Trim('(', ')') + "," + Global.name;
+                    processString = "intro," + packet.value[0].ToString().Trim('(',')')+ "," + packet.value[1].ToString().Trim('(', ')') + "," + packet.value[2];
                     break;
             }
             if (packet.end)
@@ -257,11 +259,12 @@ namespace DistributedGame.Networking
             tmpPeer.port = int.Parse(process[1].Trim());
             tmpPeer.position = new Vector2(0, 0);
             Global.peers.AddChild(tmpPeer);
+            tmpPeer.socket = socket;
             Console.WriteLine(Global.peers.children.Count.ToString());
             Global.peerTracker.Add(recName, Global.peers.children.Count - 1);
             if (int.Parse(process[2].Trim()) != 1) //Checking if the connecting peer "knows" the listener (was directed to connect by someone else, rather than a new connection)
             {
-                Global.packets.Add(new Packet("intro", new List<string> { ((IPEndPoint)socket.RemoteEndPoint).Address.ToString(), tmpPeer.port.ToString() }));
+                Global.packets.Add(new Packet("intro", new List<string> { ((IPEndPoint)socket.RemoteEndPoint).Address.ToString(), tmpPeer.port.ToString(), tmpPeer.name }));
                     //"intro," + ((IPEndPoint)socket.RemoteEndPoint).Address.ToString() + "," + tmpPeer.port + "|"
             }
             Console.WriteLine("intro," + ((IPEndPoint)socket.RemoteEndPoint).Address.ToString() + "," + tmpPeer.port.ToString() + "," + process[2].ToString().Trim());
@@ -269,7 +272,7 @@ namespace DistributedGame.Networking
             Thread listener = new Thread(() => Receiver(socket, recName));
             listener.Start();
 
-            sockets.Add(socket);
+            //sockets.Add(socket);
         }
 
         /*
