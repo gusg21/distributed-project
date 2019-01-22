@@ -28,6 +28,10 @@ namespace DistributedGame
         {
             children.Add(child);
         }
+        public void RemoveChild(ZObject child)
+        {
+            children.Remove(child);
+        }
 
         private static int InternalSorter(ZObject a, ZObject b)
         {
@@ -52,8 +56,9 @@ namespace DistributedGame
         /// </summary>
         public override void LoadContent()
         {
-            foreach (ZObject child in children)
+            for (int i = 0; i < children.Count(); i++)
             {
+                ZObject child = children[i];
                 child.LoadContent();
             }
         }
@@ -63,8 +68,9 @@ namespace DistributedGame
         /// </summary>
         public override void Update(GameTime gameTime)
         {
-            foreach (ZObject child in children)
+            for (int i = 0; i < children.Count(); i++)
             {
+                ZObject child = children[i];
                 child.Update(gameTime);
             }
         }
@@ -75,24 +81,27 @@ namespace DistributedGame
         /// </summary>
         public override void Draw(SpriteBatch batch)
         {
-            foreach (ZObject child in children)
+            for (int i = 0; i < children.Count(); i++)
             {
+                ZObject child = children[i];
                 child.Draw(batch);
             }
         }
 
         public override void Enter()
         {
-            foreach (ZObject child in children)
+            for (int i = 0; i < children.Count(); i++)
             {
+                ZObject child = children[i];
                 child.Enter();
             }
         }
 
         public override void Leave()
         {
-            foreach (ZObject child in children)
+            for (int i = 0; i < children.Count(); i++)
             {
+                ZObject child = children[i];
                 child.Leave();
             }
         }

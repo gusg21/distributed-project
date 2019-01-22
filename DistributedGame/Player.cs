@@ -78,25 +78,29 @@ namespace DistributedGame
         /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(0).IsConnected) // Controller input
+            if (!Global.isTyping)
             {
-                velocity = GamePad.GetState(0).ThumbSticks.Left * new Vector2(1, -1) * moveSpeed;
-            } else // Keyboard input
-            {
-                velocity.X = BoolToInt(Keyboard.GetState().IsKeyDown(Keys.D)) - BoolToInt(Keyboard.GetState().IsKeyDown(Keys.A));
-                velocity.Y = BoolToInt(Keyboard.GetState().IsKeyDown(Keys.S)) - BoolToInt(Keyboard.GetState().IsKeyDown(Keys.W));
-                if (velocity != Vector2.Zero)
-                    velocity.Normalize(); //Normalize the velocity so that nobody goes faster on diagonal
-                velocity *= moveSpeed;
+                if (GamePad.GetState(0).IsConnected) // Controller input
+                {
+                    velocity = GamePad.GetState(0).ThumbSticks.Left * new Vector2(1, -1) * moveSpeed;
+                }
+                else // Keyboard input
+                {
+                    velocity.X = BoolToInt(Keyboard.GetState().IsKeyDown(Keys.D)) - BoolToInt(Keyboard.GetState().IsKeyDown(Keys.A));
+                    velocity.Y = BoolToInt(Keyboard.GetState().IsKeyDown(Keys.S)) - BoolToInt(Keyboard.GetState().IsKeyDown(Keys.W));
+                    if (velocity != Vector2.Zero)
+                        velocity.Normalize(); //Normalize the velocity so that nobody goes faster on diagonal
+                    velocity *= moveSpeed;
+                }
+
+
+                // Example vibration
+                //GamePad.SetVibration(0, 1, 1);
+
+                position += velocity;
+
+                YZ(this, position);
             }
-
-            // Example vibration
-            //GamePad.SetVibration(0, 1, 1);
-
-            position += velocity;
-
-            YZ(this, position);
-
             if (bbox != null)
             {
                 IMovement result = bbox.Move(position.X + bboxOffset.X, position.Y + bboxOffset.Y, (collision) => CollisionResponses.Slide);

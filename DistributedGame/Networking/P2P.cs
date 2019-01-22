@@ -99,11 +99,11 @@ namespace DistributedGame.Networking
             Global.peers.AddChild(tmpPeer);
 
             Global.peerTracker.Add(recName, Global.peers.children.Count - 1);
-            Thread listener = new Thread(() => Receiver(connect, recName));
+            Thread listener = new Thread(() => Receiver(tmpPeer, recName));
             //Thread client = new Thread(() => Client());
 
             listener.Start();
-           // client.Start();
+            // client.Start();
             //sockets.Add(connect);
             /*}
             catch
@@ -119,11 +119,11 @@ namespace DistributedGame.Networking
         {
             while (true)
             {
-                while(Global.packets.Count > 0)
+                while (Global.packets.Count > 0)
                 {
                     Packet packet = Global.packets[0];
                     ///byte[] send2 = new byte[1024];
-                    for(int i = 0; i < Global.peers.children.Count(); i++)
+                    for (int i = 0; i < Global.peers.children.Count(); i++)
                     {
                         Socket sock = ((Peer)Global.peers.children[i]).socket;
                         Send((Peer)(Global.peers.children[i]), packet);
@@ -145,47 +145,78 @@ namespace DistributedGame.Networking
             byte[] send2 = new byte[1024];
             string processString = "";
             Socket socket = peer.socket;
-            switch (packet.send)
+            try
             {
-                case "pos":
-                    {
-                        processString = "xy," + (packet.value[0] + "," + packet.value[1] + "," + packet.value[2]);
-                        //Console.WriteLine(Encoding.ASCII.GetString(send2));
-                        break;
-                    }
-                case "intro":
-                    {
-                        processString = "intro," + packet.value[0].ToString().Trim('(', ')') + "," + packet.value[1].ToString().Trim('(', ')') + "," + packet.value[2];
-                        break;
-                    }
-                default: // got it i hope it works
-                    {
-                    processString = packet.send + ",";
-                    foreach (string value in packet.value) {
-                            processString += value + ",";
-                    }
-                        break;
-                    }
+
+                switch (packet.send)
+                {
+                    case "pos":
+                        {
+                            processString = "xy," + (packet.value[0] + "," + packet.value[1] + "," + packet.value[2]);
+                            //Console.WriteLine(Encoding.ASCII.GetString(send2));
+                            break;
+                        }
+                    case "hit":
+                        {
+                            processString = "hit";
+                            break;
+                        }
+                    /*case "intro":
+                        {
+                            processString = "intro," + packet.value[0].ToString().Trim('(', ')') + "," + packet.value[1].ToString().Trim('(', ')') + "," + packet.value[2];
+                            break;
+                        }*/
+                    default: // got it i hope it works\
+                        {
+                            processString = packet.send + ",";
+                            foreach (string value in packet.value)
+                            {
+                                processString += value + ",";
+                            }
+                            break;
+                        }
+                }
             }
-            if (packet.end)
+            catch
             {
-                processString = processString + ",end";
+                Console.WriteLine("MALFORMED PACKET, IGNORING!");
             }
             processString = processString + "|";
             send2 = Encoding.ASCII.GetBytes(processString);
-            socket.Send(send2);
+            try //Try to send the data if the data does not like being sent, the connection must be closed and you should no longer be friends with that person.
+            {
+                socket.Send(send2);
+            }
+            catch
+            {
+                socket.Shutdown(SocketShutdown.Both);
+                socket.Close();
+
+                Console.WriteLine(peer.name + " HAS LOST CONNECTION");
+                Global.peerTracker.Remove(peer.name);
+                Global.peers.RemoveChild(peer);
+            }
         }
         /// <summary>
         /// Receive on socket and process data for a named peer.
         /// </summary>
-        /// <param name="socket">The socket to receive on</param>
+        /// <param name="peer">The peer to receive for</param>
         /// <param name="name">The name of the Peer you are processing for</param>
-        private void Receive(Socket socket, string name)
+        private void Receive(Peer peer, string name)
         {
+            Socket socket = peer.socket;
             while (true)
             {
                 byte[] data = new byte[1024];
-                socket.Receive(data);
+                try //Try to get data, if the socket is closed for whatever reason stop the while loop, terminating the Receive thead.
+                {
+                    socket.Receive(data);
+                }
+                catch
+                {
+                    break;
+
+                }
                 string rec = Encoding.ASCII.GetString(data);
                 Console.WriteLine(rec);
                 rec = rec.Trim(' ', '\n', '\0');
@@ -214,7 +245,7 @@ namespace DistributedGame.Networking
                             case "hit":
                                 if (recSplit[1] == Global.name)
                                 {
-                                    Global.game.SwitchState("")
+                                    Global.game.SwitchState("");
                                 }
                                 break;
                             case "intro":
@@ -225,6 +256,9 @@ namespace DistributedGame.Networking
                                     Thread client = new Thread(() => Connector(int.Parse(recSplit[2]), recSplit[1].Trim(), Global.name, true));
                                     client.Start();
                                 }
+                                break;
+                            case "chat":
+                                Global.chat.Add(new Message(peer.name + " says: " + recSplit[1]));
                                 break;
                         }
                     }
@@ -240,11 +274,11 @@ namespace DistributedGame.Networking
         /// </summary>
         /// <param name="socket"></param>
         /// <param name="name"></param>
-        private void Receiver(Socket socket, string name)
+        private void Receiver(Peer peer, string name)
         {
             while (true)
             {
-                Receive(socket, name);
+                Receive(peer, name);
             }
         }
         /// <summary>
@@ -275,13 +309,13 @@ namespace DistributedGame.Networking
             if (int.Parse(process[2].Trim()) != 1) //Checking if the connecting peer "knows" the listener (was directed to connect by someone else, rather than a new connection)
             {
                 Global.packets.Add(new Packet("intro", new List<string> { ((IPEndPoint)socket.RemoteEndPoint).Address.ToString(), tmpPeer.port.ToString(), tmpPeer.name }));
-                    //"intro," + ((IPEndPoint)socket.RemoteEndPoint).Address.ToString() + "," + tmpPeer.port + "|"
+                //"intro," + ((IPEndPoint)socket.RemoteEndPoint).Address.ToString() + "," + tmpPeer.port + "|"
             }
             Console.WriteLine("intro," + ((IPEndPoint)socket.RemoteEndPoint).Address.ToString() + "," + tmpPeer.port.ToString() + "," + process[2].ToString().Trim());
             //Receive(socket, recName);
-            Thread listener = new Thread(() => Receiver(socket, recName));
+            Thread listener = new Thread(() => Receiver(tmpPeer, recName));
             listener.Start();
-
+            Global.chat.Add(new Networking.Message(tmpPeer.name + " says hello."));
             //sockets.Add(socket);
         }
 

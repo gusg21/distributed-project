@@ -69,5 +69,7 @@ namespace DistributedGame
         /// The port that is being hosted
         /// </summary>
         public static int host;
+        public static List<Message> chat = new List<Message>();
+        public static bool isTyping = false;
     }
 }
