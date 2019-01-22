@@ -44,7 +44,7 @@ namespace DistributedGame.Networking
                     Console.WriteLine("netstream");
 
                     Thread server = new Thread(() => Handshaker(socket));
-                    server.Start(); ; //Thread this
+                    server.Start(); //Thread this
                 }
                 catch
                 {

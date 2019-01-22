@@ -94,7 +94,7 @@ namespace DistributedGame
                     hasDied = true;
                     Global.p.position = new Vector2(-100, -100);
                     Global.packets.Add(new Packet("chat", new List<string>() { Global.name + " has DIED", "255", "0", "0" }));
-                    Global.chat.Add(new Message("YOU HAVE DIED!", 255, 0, 0));
+                    Global.chat.Add(new Message("YOU HAVE DIED! Respawning...", 255, 0, 0));
                 }
                 if(gameTime.TotalGameTime.TotalSeconds - timeOfDeath > 5)
                 {

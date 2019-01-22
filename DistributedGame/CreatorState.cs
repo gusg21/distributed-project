@@ -60,7 +60,7 @@ namespace DistributedGame
 
             texturePosition = new Vector2(100, (Global.g.PresentationParameters.BackBufferHeight - texture.Height) / 3);
 
-            font = new Font(Global.c.Load<Texture2D>("fonts/font1.png"), "abcdefghijklmnopqrstuvwxyz1234567890:!' ", 4, 8);
+            font = new Font(Global.c.Load<Texture2D>("fonts/font1.png"), "abcdefghijklmnopqrstuvwxyz1234567890:!'. ", 4, 8);
             Global.font = font;
             Global.name = Global.r.RandomString(5);
             boxBox.Insert(0, new Vector2(110, 200));
@@ -183,11 +183,11 @@ namespace DistributedGame
 
             FontRenderer.RenderFont(batch, font, "press the #b button #nto reload the image", new Vector2(500, 400));
             
+            
 
-
-            FontRenderer.RenderFont(batch, font, "connect", new Vector2(100, 150), 4, Color.White);
-            FontRenderer.RenderFont(batch, font, "host", new Vector2(400, 150), 4, Color.White);
-            FontRenderer.RenderFont(batch, font, "ip", new Vector2(500, 600), 4, Color.White);
+            FontRenderer.RenderFont(batch, font, "connect", new Vector2(100, 150), 4, target == 0 ? Color.Yellow : Color.White);
+            FontRenderer.RenderFont(batch, font, "host", new Vector2(400, 150), 4, target == 1 ? Color.Orange : Color.White);
+            FontRenderer.RenderFont(batch, font, "ip", new Vector2(500, 600), 4, target == 2 ? Color.Magenta : Color.White);
             FontRenderer.RenderFont(batch, font, boxValue[0], boxBox[0], 4, Color.Black);
             FontRenderer.RenderFont(batch, font, boxValue[1], boxBox[1], 4, Color.Black);
             FontRenderer.RenderFont(batch, font, boxValue[2], boxBox[2], 4, Color.Black);
