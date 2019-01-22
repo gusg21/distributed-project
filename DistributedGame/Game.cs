@@ -32,6 +32,7 @@ namespace DistributedGame
             // Literally the worst design pattern
             Global.c = Content;
             Global.g = GraphicsDevice;
+            Global.game = this;
 
             states = new Dictionary<string, State>();
             states.Add("play", new PlayState(this));

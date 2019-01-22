@@ -33,6 +33,10 @@ namespace DistributedGame
         /// </summary>
         public static GraphicsDevice g;
         /// <summary>
+        /// The global game
+        /// </summary>
+        public static Game game;
+        /// <summary>
         /// The local player
         /// </summary>
         public static Player p;

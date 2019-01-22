@@ -20,6 +20,16 @@ namespace DistributedGame
         Vector2 velocity;
         public int port { get; set; }
 
+        public Rectangle bbox { get
+            {
+                Rectangle bounds = texture.Bounds;
+                bounds.Offset(
+                    Player.Vector2ToPoint(
+                        position
+                        )
+                     - new Point(8, 8));
+                return bounds;
+            } } // gets peer's bounding box
         Vector2 bboxOffset;
         //IBox bbox;
         public string name { get; set; } = "JOE";

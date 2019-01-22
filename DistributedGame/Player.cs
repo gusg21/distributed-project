@@ -105,11 +105,32 @@ namespace DistributedGame
 
             rotation = (float) Math.Atan2(Mouse.GetState().Y / Global.cam.Zoom - position.Y, Mouse.GetState().X / Global.cam.Zoom - position.X);
             Global.packets.Add(new Packet("pos", new List<string> { Math.Round(position.X, 2).ToString(), Math.Round(position.Y, 2).ToString(), Math.Round(rotation, 2).ToString() }));
+            foreach (Peer peer in Global.peers.children)
+            {
+                if (peer.bbox.Intersects(LanceRect()))
+                {
+                    Global.packets.Add(new Packet("hit", new List<string>() { peer.name })); // ok just tell me dont edit
+                }
+            }
         }
 
         public Vector2 GetCenter()
         {
             return position + new Vector2(texture.Bounds.Center.X, texture.Bounds.Center.Y);
+        }
+
+        public Rectangle LanceRect()
+        {
+            Rectangle lanceBounds = lanceTexture.Bounds;
+            lanceBounds.Offset(Vector2ToPoint(position));
+            return lanceBounds;
+        }
+
+        public static Point Vector2ToPoint(Vector2 vec)
+        {
+            return new Point(
+                   (int) vec.X, (int) vec.Y
+                );
         }
 
         float VectorToAngle(Vector2 vector)

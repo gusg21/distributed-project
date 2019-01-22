@@ -31,7 +31,7 @@ namespace DistributedGame.Networking
         public void Listener(int hostPort, string name)
         {
             TcpListener listener = new TcpListener(hostPort);
-            while (3 == 3)
+            while (6 / 4 == 3 / 2)
             {
                 Console.WriteLine("Up");
                 try
@@ -148,17 +148,24 @@ namespace DistributedGame.Networking
             switch (packet.send)
             {
                 case "pos":
-                case "position":
-                case "xy":
-                    processString = "xy," + (packet.value[0] + "," + packet.value[1] + "," + packet.value[2]);
-                    //Console.WriteLine(Encoding.ASCII.GetString(send2));
-                    break;
-                case "hit":
-                    processString = "hit";
-                    break;
+                    {
+                        processString = "xy," + (packet.value[0] + "," + packet.value[1] + "," + packet.value[2]);
+                        //Console.WriteLine(Encoding.ASCII.GetString(send2));
+                        break;
+                    }
                 case "intro":
-                    processString = "intro," + packet.value[0].ToString().Trim('(',')')+ "," + packet.value[1].ToString().Trim('(', ')') + "," + packet.value[2];
-                    break;
+                    {
+                        processString = "intro," + packet.value[0].ToString().Trim('(', ')') + "," + packet.value[1].ToString().Trim('(', ')') + "," + packet.value[2];
+                        break;
+                    }
+                default: // got it i hope it works
+                    {
+                    processString = packet.send + ",";
+                    foreach (string value in packet.value) {
+                            processString += value + ",";
+                    }
+                        break;
+                    }
             }
             if (packet.end)
             {
@@ -189,7 +196,7 @@ namespace DistributedGame.Networking
                     {
                         List<string> recSplit = command.Split(',').ToList<string>();
                         //Console.WriteLine(recSplit[0] + "RECSPLIT");
-                        switch (recSplit[0])
+                        switch (recSplit[0])  // index 0 is type
                         {
                             case "xy":
                                 /*Console.WriteLine("Rec.");
@@ -205,7 +212,10 @@ namespace DistributedGame.Networking
 
                                 break;
                             case "hit":
-                                //death code
+                                if (recSplit[1] == Global.name)
+                                {
+                                    Global.game.SwitchState("")
+                                }
                                 break;
                             case "intro":
                                 Console.WriteLine(recSplit[1] + " REC1");
