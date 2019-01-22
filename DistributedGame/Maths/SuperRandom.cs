@@ -43,5 +43,10 @@ namespace DistributedGame.Maths
             }
             return s;
         }
+        public int RandomRange(int min, int max)
+        {
+            int ran = random.Next(min, max);
+            return ran;
+        }
     }
 }

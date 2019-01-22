@@ -17,7 +17,7 @@ namespace DistributedGame
         Texture2D texture;
         Texture2D lanceTexture;
         Vector2 lanceOffset = new Vector2(8, 7);
-        public Vector2 position { get; private set; } = Vector2.Zero;
+        public Vector2 position { get; set; } = Vector2.Zero;
         Vector2 velocity;
         Vector2 bboxOffset;
         public float rotation;
@@ -78,7 +78,7 @@ namespace DistributedGame
         /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
-            if (!Global.isTyping)
+            if (!Global.isTyping || !Global.isDead)
             {
                 if (GamePad.GetState(0).IsConnected) // Controller input
                 {
@@ -109,11 +109,13 @@ namespace DistributedGame
 
             rotation = (float) Math.Atan2(Mouse.GetState().Y / Global.cam.Zoom - position.Y, Mouse.GetState().X / Global.cam.Zoom - position.X);
             Global.packets.Add(new Packet("pos", new List<string> { Math.Round(position.X, 2).ToString(), Math.Round(position.Y, 2).ToString(), Math.Round(rotation, 2).ToString() }));
-            foreach (Peer peer in Global.peers.children)
+            for (int i = 0; i < Global.peers.children.Count(); i ++)
             {
+                Peer peer = (Peer)Global.peers.children[i];
                 if (peer.bbox.Intersects(LanceRect()))
                 {
                     Global.packets.Add(new Packet("hit", new List<string>() { peer.name })); // ok just tell me dont edit
+                    Console.WriteLine(peer.name);
                 }
             }
         }

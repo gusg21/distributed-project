@@ -52,6 +52,9 @@ namespace DistributedGame
         /// Physics World
         /// </summary>
         public static World w;
+        /// <summary>
+        /// Player name
+        /// </summary>
         public static string name;
         /// <summary>
         /// peers
@@ -71,5 +74,6 @@ namespace DistributedGame
         public static int host;
         public static List<Message> chat = new List<Message>();
         public static bool isTyping = false;
+        public static bool isDead = false;
     }
 }

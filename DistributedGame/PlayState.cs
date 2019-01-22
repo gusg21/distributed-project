@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using DistributedGame.Maths;
 using DistributedGame.Networking;
 using Humper;
 using Microsoft.Xna.Framework;
@@ -22,7 +23,10 @@ namespace DistributedGame
         Camera camera;
         P2P peer;
         bool lastTil = false;
+        bool hasDied = false;
+        double timeOfDeath;
         string toChat = "";
+        SuperRandom random = new SuperRandom();
         private IEnumerable<Keys> lastPressedKey = new Keys[0];
         public PlayState(Game game) : base(game)
         {
@@ -82,6 +86,21 @@ namespace DistributedGame
             {
                 lastTil = false;
             }
+            if (Global.isDead)
+            {
+                if (!hasDied)
+                {
+                    timeOfDeath = gameTime.TotalGameTime.TotalSeconds;
+                    hasDied = true;
+                    Global.p.position = new Vector2(-100, -100);
+                }
+                if(gameTime.TotalGameTime.TotalSeconds - timeOfDeath > 5)
+                {
+                    hasDied = false;
+                    Global.isDead = false;
+                    Global.p.position = new Vector2(random.RandomRange(0,500), random.RandomRange(0, 380));
+                }
+            }
             if (Global.isTyping)
             {
                 KeyboardState kbState = Keyboard.GetState();
@@ -138,7 +157,7 @@ namespace DistributedGame
             {
                 Global.chat.RemoveAt(0);
             }
-            for (int i = 0; i < Global.chat.Count(); i++)
+            for (int i = Global.chat.Count(); i >  Global.chat.Count(); i--)
             {
                 Message msg = Global.chat[i];
                 FontRenderer.RenderFont(batch, Global.font, msg.text.ToLower(), new Vector2(0, 65 - chatOffset), 1, msg.GetColor());

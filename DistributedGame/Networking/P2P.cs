@@ -77,39 +77,46 @@ namespace DistributedGame.Networking
 
             //try
             //{
-            connect.Connect(ipEndpoint);
-            Console.WriteLine("Client connected to {0}", connect.RemoteEndPoint.ToString());
-            byte[] send = Encoding.ASCII.GetBytes((name) + "," + Global.host.ToString() + "," + (known ? 1 : 0).ToString());
-            connect.Send(send);
-            Console.WriteLine("sent");
-            byte[] data = new byte[1024];
-            connect.Receive(data);
-            string recName = "";
-            string[] process = new string[2];
-            string rec = Encoding.ASCII.GetString(data).ToLower();
-            process = rec.Split(',').ToArray<string>();
-            recName = process[0].Trim(' ', '\n', '\0');
-            Console.WriteLine(recName + " is the other's name");
-            tmpPeer = new Peer();
-            tmpPeer.name = recName;
-            tmpPeer.position = new Vector2(0, 0);
-            tmpPeer.port = int.Parse(process[1].Trim(' ', '\n', '\0'));
-            tmpPeer.socket = connect;
+            try
+            {
+                connect.Connect(ipEndpoint);
+                Console.WriteLine("Client connected to {0}", connect.RemoteEndPoint.ToString());
+                byte[] send = Encoding.ASCII.GetBytes((name) + "," + Global.host.ToString() + "," + (known ? 1 : 0).ToString());
+                connect.Send(send);
+                Console.WriteLine("sent");
+                byte[] data = new byte[1024];
+                connect.Receive(data);
+                string recName = "";
+                string[] process = new string[2];
+                string rec = Encoding.ASCII.GetString(data).ToLower();
+                process = rec.Split(',').ToArray<string>();
+                recName = process[0].Trim(' ', '\n', '\0');
+                Console.WriteLine(recName + " is the other's name");
+                tmpPeer = new Peer();
+                tmpPeer.name = recName;
+                tmpPeer.position = new Vector2(0, 0);
+                tmpPeer.port = int.Parse(process[1].Trim(' ', '\n', '\0'));
+                tmpPeer.socket = connect;
 
-            Global.peers.AddChild(tmpPeer);
+                Global.peers.AddChild(tmpPeer);
 
-            Global.peerTracker.Add(recName, Global.peers.children.Count - 1);
-            Thread listener = new Thread(() => Receiver(tmpPeer, recName));
-            //Thread client = new Thread(() => Client());
+                Global.peerTracker.Add(recName, Global.peers.children.Count - 1);
+                Thread listener = new Thread(() => Receiver(tmpPeer, recName));
+                //Thread client = new Thread(() => Client());
 
-            listener.Start();
-            // client.Start();
-            //sockets.Add(connect);
-            /*}
+                listener.Start();
+                // client.Start();
+                //sockets.Add(connect);
+                /*}
+                catch
+                {*/
+                //Console.WriteLine("It broke.");
+                //}
+            }
             catch
-            {*/
-            //Console.WriteLine("It broke.");
-            //}
+            {
+                Console.WriteLine("CONNECTION ERROR: ARE YOU SURE THAT'S RIGHT?");
+            }
         }
         /// <summary>
         /// The Client sends all packets waiting to be sent.
@@ -156,11 +163,6 @@ namespace DistributedGame.Networking
                             //Console.WriteLine(Encoding.ASCII.GetString(send2));
                             break;
                         }
-                    case "hit":
-                        {
-                            processString = "hit";
-                            break;
-                        }
                     /*case "intro":
                         {
                             processString = "intro," + packet.value[0].ToString().Trim('(', ')') + "," + packet.value[1].ToString().Trim('(', ')') + "," + packet.value[2];
@@ -169,8 +171,9 @@ namespace DistributedGame.Networking
                     default: // got it i hope it works\
                         {
                             processString = packet.send + ",";
-                            foreach (string value in packet.value)
+                            for(int i = 0; i < packet.value.Count(); i++)
                             {
+                                string value = packet.value[i];
                                 processString += value + ",";
                             }
                             break;
@@ -245,7 +248,7 @@ namespace DistributedGame.Networking
                             case "hit":
                                 if (recSplit[1] == Global.name)
                                 {
-                                    Global.game.SwitchState("");
+                                    Global.isDead = true;
                                 }
                                 break;
                             case "intro":
