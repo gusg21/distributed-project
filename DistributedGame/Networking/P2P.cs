@@ -261,7 +261,7 @@ namespace DistributedGame.Networking
                                 }
                                 break;
                             case "chat":
-                                if (recSplit.Count() < 2)
+                                if (recSplit.Count() < 4)
                                 {
                                     Global.chat.Add(new Message(peer.name + " says: " + recSplit[1]));
                                 }
