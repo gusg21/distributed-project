@@ -261,7 +261,15 @@ namespace DistributedGame.Networking
                                 }
                                 break;
                             case "chat":
-                                Global.chat.Add(new Message(peer.name + " says: " + recSplit[1]));
+                                if (recSplit.Count() < 2)
+                                {
+                                    Global.chat.Add(new Message(peer.name + " says: " + recSplit[1]));
+                                }
+                                else
+                                {
+                                    Global.chat.Add(new Message(peer.name + " says: " + recSplit[1], int.Parse(recSplit[2]), int.Parse(recSplit[3]), int.Parse(recSplit[5])));
+
+                                }
                                 break;
                         }
                     }

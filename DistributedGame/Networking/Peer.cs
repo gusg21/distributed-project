@@ -24,7 +24,7 @@ namespace DistributedGame
             {
                 Rectangle bounds = texture.Bounds;
                 bounds.Offset(
-                    Player.Vector2ToPoint(position)- new Point(16, 16));
+                    Player.Vector2ToPoint(position)- new Point(8, 8));
                 return bounds;
             } } // gets peer's bounding box
         Vector2 bboxOffset;

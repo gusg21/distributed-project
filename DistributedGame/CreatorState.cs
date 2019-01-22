@@ -17,6 +17,7 @@ namespace DistributedGame
         Texture2D texture;
         Vector2 texturePosition;
         Texture2D textbox;
+        Texture2D Longtextbox;
 
         P2P peer;
         List<Vector2> boxBox = new List<Vector2>();
@@ -24,7 +25,7 @@ namespace DistributedGame
 
         Font font;
         int target = 0;
-        int maxLength = 5;
+        int[] maxLength = new int[3] { 5,5,39};
         private IEnumerable<Keys> lastPressedKey = new Keys[0];
 
         public CreatorState(Game game) : base(game)
@@ -62,10 +63,13 @@ namespace DistributedGame
             font = new Font(Global.c.Load<Texture2D>("fonts/font1.png"), "abcdefghijklmnopqrstuvwxyz1234567890:!' ", 4, 8);
             Global.font = font;
             Global.name = Global.r.RandomString(5);
-            boxBox.Insert(0, new Vector2(100, 200));
-            boxBox.Insert(1, new Vector2(400, 200));
+            boxBox.Insert(0, new Vector2(110, 200));
+            boxBox.Insert(1, new Vector2(410, 200));
+            boxBox.Insert(2, new Vector2(335, 650));
+
             boxValue.Insert(0, "8888");
             boxValue.Insert(1, "8888");
+            boxValue.Insert(2, "127.0.0.1");
             int width = 100;
             int height = 50;
             byte[] colors = new byte[width * height * 4];
@@ -79,6 +83,7 @@ namespace DistributedGame
 
             textbox = new Texture2D(Global.g, width, height);
             textbox.SetData(colors);
+            Longtextbox = Player.GenerateRectangle(width * 4, height, Color.White);
         }
 
         public override void Enter()
@@ -113,7 +118,7 @@ namespace DistributedGame
                     if (int.Parse(boxValue[0]) != 0)
                     {
                         Console.WriteLine("doing");
-                        Thread connector = new Thread(() => peer.Connector(int.Parse(boxValue[0]), "localhost", Global.name));
+                        Thread connector = new Thread(() => peer.Connector(int.Parse(boxValue[0]), boxValue[2], Global.name));
                         connector.Start();
                     }
                 }
@@ -142,6 +147,10 @@ namespace DistributedGame
                             boxValue[target] = boxValue[target].Substring(0, boxValue[target].Length - 1);
                         }
                     }
+                    else if(key == Keys.OemPeriod)
+                    {
+                        boxValue[target] += ".";
+                    }
                     else if (key == Keys.Tab)
                     {
                         target++;
@@ -149,7 +158,7 @@ namespace DistributedGame
                     }
                     else
                     {
-                        if(boxValue[target].Length < maxLength)
+                        if(boxValue[target].Length < maxLength[target])
                         {
                             boxValue[target] = boxValue[target] + (string)key.ToString().Substring(key.ToString().Length - 1);
                         }
@@ -163,19 +172,25 @@ namespace DistributedGame
 
         public override void Draw(SpriteBatch batch)
         {
-            Global.g.Clear(Color.Black);
+            //Global.g.Clear(Color.Black);
 
             batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
+            batch.Draw(textbox, new Vector2(100, 200), null, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
+            batch.Draw(textbox, new Vector2(400, 200), null, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
+            batch.Draw(Longtextbox, new Vector2(325, 650), null, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 1);
             batch.Draw(texture, texturePosition, texture.Bounds, Color.White, 0, Vector2.Zero, 16, SpriteEffects.None, 0);
             FontRenderer.RenderFont(batch, font, "press the #a button #nto continue", new Vector2(500, 270));
 
             FontRenderer.RenderFont(batch, font, "press the #b button #nto reload the image", new Vector2(500, 400));
-            batch.Draw(textbox, new Vector2(100, 200), Color.White);
-            batch.Draw(textbox, new Vector2(400, 200), Color.White);
-            FontRenderer.RenderFont(batch, font, boxValue[0], boxBox[0], 4, Color.Black);
-            FontRenderer.RenderFont(batch, font, boxValue[1], boxBox[1], 4, Color.Black);
+            
+
+
             FontRenderer.RenderFont(batch, font, "connect", new Vector2(100, 150), 4, Color.White);
             FontRenderer.RenderFont(batch, font, "host", new Vector2(400, 150), 4, Color.White);
+            FontRenderer.RenderFont(batch, font, "ip", new Vector2(500, 600), 4, Color.White);
+            FontRenderer.RenderFont(batch, font, boxValue[0], boxBox[0], 4, Color.Black);
+            FontRenderer.RenderFont(batch, font, boxValue[1], boxBox[1], 4, Color.Black);
+            FontRenderer.RenderFont(batch, font, boxValue[2], boxBox[2], 4, Color.Black);
 
             batch.End();
         }

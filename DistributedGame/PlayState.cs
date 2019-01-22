@@ -93,6 +93,8 @@ namespace DistributedGame
                     timeOfDeath = gameTime.TotalGameTime.TotalSeconds;
                     hasDied = true;
                     Global.p.position = new Vector2(-100, -100);
+                    Global.packets.Add(new Packet("chat", new List<string>() { Global.name + " has DIED", "255", "0", "0" }));
+                    Global.chat.Add(new Message("YOU HAVE DIED!", 255, 0, 0));
                 }
                 if(gameTime.TotalGameTime.TotalSeconds - timeOfDeath > 5)
                 {
@@ -157,9 +159,9 @@ namespace DistributedGame
             {
                 Global.chat.RemoveAt(0);
             }
-            for (int i = Global.chat.Count(); i >  Global.chat.Count(); i--)
+            for (int i = Global.chat.Count(); i >  0; i--)
             {
-                Message msg = Global.chat[i];
+                Message msg = Global.chat[i -1];
                 FontRenderer.RenderFont(batch, Global.font, msg.text.ToLower(), new Vector2(0, 65 - chatOffset), 1, msg.GetColor());
                 chatOffset -= 10;
 

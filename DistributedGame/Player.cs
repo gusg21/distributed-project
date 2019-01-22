@@ -78,35 +78,37 @@ namespace DistributedGame
         /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
-            if (!Global.isTyping || !Global.isDead)
+            if (!Global.isTyping)
             {
-                if (GamePad.GetState(0).IsConnected) // Controller input
+                if (!Global.isDead)
                 {
-                    velocity = GamePad.GetState(0).ThumbSticks.Left * new Vector2(1, -1) * moveSpeed;
+                    if (GamePad.GetState(0).IsConnected) // Controller input
+                    {
+                        velocity = GamePad.GetState(0).ThumbSticks.Left * new Vector2(1, -1) * moveSpeed;
+                    }
+                    else // Keyboard input
+                    {
+                        velocity.X = BoolToInt(Keyboard.GetState().IsKeyDown(Keys.D)) - BoolToInt(Keyboard.GetState().IsKeyDown(Keys.A));
+                        velocity.Y = BoolToInt(Keyboard.GetState().IsKeyDown(Keys.S)) - BoolToInt(Keyboard.GetState().IsKeyDown(Keys.W));
+                        if (velocity != Vector2.Zero)
+                            velocity.Normalize(); //Normalize the velocity so that nobody goes faster on diagonal
+                        velocity *= moveSpeed;
+                    }
+
+
+                    // Example vibration
+                    //GamePad.SetVibration(0, 1, 1);
+
+                    position += velocity;
+
+                    YZ(this, position);
                 }
-                else // Keyboard input
+                if (bbox != null)
                 {
-                    velocity.X = BoolToInt(Keyboard.GetState().IsKeyDown(Keys.D)) - BoolToInt(Keyboard.GetState().IsKeyDown(Keys.A));
-                    velocity.Y = BoolToInt(Keyboard.GetState().IsKeyDown(Keys.S)) - BoolToInt(Keyboard.GetState().IsKeyDown(Keys.W));
-                    if (velocity != Vector2.Zero)
-                        velocity.Normalize(); //Normalize the velocity so that nobody goes faster on diagonal
-                    velocity *= moveSpeed;
+                    IMovement result = bbox.Move(position.X + bboxOffset.X, position.Y + bboxOffset.Y, (collision) => CollisionResponses.Slide);
+                    position = new Vector2(result.Destination.X - bboxOffset.X, result.Destination.Y - bboxOffset.Y);
                 }
-
-
-                // Example vibration
-                //GamePad.SetVibration(0, 1, 1);
-
-                position += velocity;
-
-                YZ(this, position);
             }
-            if (bbox != null)
-            {
-                IMovement result = bbox.Move(position.X + bboxOffset.X, position.Y + bboxOffset.Y, (collision) => CollisionResponses.Slide);
-                position = new Vector2(result.Destination.X - bboxOffset.X, result.Destination.Y - bboxOffset.Y);
-            }
-
             rotation = (float) Math.Atan2(Mouse.GetState().Y / Global.cam.Zoom - position.Y, Mouse.GetState().X / Global.cam.Zoom - position.X);
             Global.packets.Add(new Packet("pos", new List<string> { Math.Round(position.X, 2).ToString(), Math.Round(position.Y, 2).ToString(), Math.Round(rotation, 2).ToString() }));
             for (int i = 0; i < Global.peers.children.Count(); i ++)
