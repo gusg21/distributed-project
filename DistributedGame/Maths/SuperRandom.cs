@@ -43,6 +43,12 @@ namespace DistributedGame.Maths
             }
             return s;
         }
+        /// <summary>
+        /// Simple random range
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
         public int RandomRange(int min, int max)
         {
             int ran = random.Next(min, max);

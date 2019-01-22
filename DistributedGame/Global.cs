@@ -72,8 +72,17 @@ namespace DistributedGame
         /// The port that is being hosted
         /// </summary>
         public static int host;
+        /// <summary>
+        /// The display stack for the chat, should only have 4 or 5 messages at any given time
+        /// </summary>
         public static List<Message> chat = new List<Message>();
+        /// <summary>
+        /// Is the player in chat?
+        /// </summary>
         public static bool isTyping = false;
+        /// <summary>
+        /// Is the player dead?
+        /// </summary>
         public static bool isDead = false;
     }
 }

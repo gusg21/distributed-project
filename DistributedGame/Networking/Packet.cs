@@ -11,6 +11,11 @@ namespace DistributedGame.Networking
         public string send { get;}
         public List<string> value { get;}
         public bool end { get; }
+        /// <summary>
+        /// Simple wrapper to make standardized sending packets.
+        /// </summary>
+        /// <param name="_send"></param>
+        /// <param name="_value"></param>
         public Packet(string _send, List<string> _value)
         {
             send = _send;

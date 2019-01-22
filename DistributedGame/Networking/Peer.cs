@@ -11,20 +11,22 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace DistributedGame
 {
+    /// <summary>
+    /// The peer is the object that simulates a player for the client.
+    /// </summary>
     class Peer : ZObject
     {
         Texture2D texture;
         Texture2D lanceTex;
         public Vector2 position { get; set; } = Vector2.Zero;
-        public Socket socket { get; set; }
+        public Socket socket { get; set; } //The socket that this peer is through.
         Vector2 velocity;
         public int port { get; set; }
 
         public Rectangle bbox { get
             {
                 Rectangle bounds = texture.Bounds;
-                bounds.Offset(
-                    Player.Vector2ToPoint(position)- new Point(8, 8));
+                bounds.Offset(Player.Vector2ToPoint(position)- new Point(8, 8));
                 return bounds;
             } } // gets peer's bounding box
         Vector2 bboxOffset;

@@ -79,7 +79,7 @@ namespace DistributedGame.Networking
             //{
             try
             {
-                connect.Connect(ipEndpoint);
+                connect.Connect(ipEndpoint); //This section here can be done a lot more elegantly, however it was the first thing to be written and it's not broken
                 Console.WriteLine("Client connected to {0}", connect.RemoteEndPoint.ToString());
                 byte[] send = Encoding.ASCII.GetBytes((name) + "," + Global.host.ToString() + "," + (known ? 1 : 0).ToString());
                 connect.Send(send);
@@ -101,17 +101,10 @@ namespace DistributedGame.Networking
                 Global.peers.AddChild(tmpPeer);
 
                 Global.peerTracker.Add(recName, Global.peers.children.Count - 1);
-                Thread listener = new Thread(() => Receiver(tmpPeer, recName));
-                //Thread client = new Thread(() => Client());
+                Thread listener = new Thread(() => Receiver(tmpPeer, recName)); //Start a listener to manage the new connection
 
                 listener.Start();
-                // client.Start();
-                //sockets.Add(connect);
-                /*}
-                catch
-                {*/
-                //Console.WriteLine("It broke.");
-                //}
+
             }
             catch
             {
@@ -184,7 +177,7 @@ namespace DistributedGame.Networking
             {
                 Console.WriteLine("MALFORMED PACKET, IGNORING!");
             }
-            processString = processString + "|";
+            processString = processString + "|"; // "|" is used to break up commands because I didn't feel like implementing actuall packets
             send2 = Encoding.ASCII.GetBytes(processString);
             try //Try to send the data if the data does not like being sent, the connection must be closed and you should no longer be friends with that person.
             {
@@ -229,29 +222,20 @@ namespace DistributedGame.Networking
                     try
                     {
                         List<string> recSplit = command.Split(',').ToList<string>();
-                        //Console.WriteLine(recSplit[0] + "RECSPLIT");
                         switch (recSplit[0])  // index 0 is type
                         {
-                            case "xy":
-                                /*Console.WriteLine("Rec.");
-                                foreach (KeyValuePair<string, int> key in Global.peerTracker)
-                                {
-                                    Console.WriteLine("Key = {0}, Value = {1}", key.Key, key.Value);
-                                }
-                                Console.WriteLine(name);
-                                Console.WriteLine(Global.peerTracker[name]);
-                                Console.WriteLine(rec + " REC");*/
+                            case "xy": //"xy,X,Y,ROT"
                                 ((Peer)Global.peers.children[Global.peerTracker[name]]).position = new Vector2(float.Parse(recSplit[1]), float.Parse(recSplit[2]));
                                 ((Peer)Global.peers.children[Global.peerTracker[name]]).rotation = float.Parse(recSplit[3]);
 
                                 break;
-                            case "hit":
+                            case "hit"://"hit,NAME"
                                 if (recSplit[1] == Global.name)
                                 {
                                     Global.isDead = true;
                                 }
                                 break;
-                            case "intro":
+                            case "intro"://"intro,ip,port"
                                 Console.WriteLine(recSplit[1] + " REC1");
                                 Console.WriteLine(recSplit[2] + " REC2");
                                 if (recSplit[3] != Global.name)
@@ -260,7 +244,7 @@ namespace DistributedGame.Networking
                                     client.Start();
                                 }
                                 break;
-                            case "chat":
+                            case "chat"://"chat,message OR chat,message,r,g,b"
                                 if (recSplit.Count() < 4)
                                 {
                                     Global.chat.Add(new Message(peer.name + " says: " + recSplit[1]));
@@ -296,7 +280,7 @@ namespace DistributedGame.Networking
         /// Preforms the inital steps for establishing a connection.
         /// </summary>
         /// <param name="socket"></param>
-        public void Handshaker(Socket socket)
+        public void Handshaker(Socket socket) //The handshaker and the connecter are flip sides of one another, the connecting party sends the first message.
         {
             byte[] data = new byte[1024];
             socket.Receive(data);
@@ -327,7 +311,6 @@ namespace DistributedGame.Networking
             Thread listener = new Thread(() => Receiver(tmpPeer, recName));
             listener.Start();
             Global.chat.Add(new Networking.Message(tmpPeer.name + " says hello."));
-            //sockets.Add(socket);
         }
 
         /*

@@ -111,14 +111,14 @@ namespace DistributedGame
                 Global.host = int.Parse(boxValue[1]);
                 Thread server = new Thread(() => peer.Listener(Global.host, Global.name));
                 server.Start();
-                Thread client = new Thread(() => peer.Client());
+                Thread client = new Thread(() => peer.Client()); //Start the client, this is responcible for sending out all packets.
                 client.Start();
                 if (boxValue[0] != null && boxValue[0] != "")
                 {
                     if (int.Parse(boxValue[0]) != 0)
                     {
                         Console.WriteLine("doing");
-                        Thread connector = new Thread(() => peer.Connector(int.Parse(boxValue[0]), boxValue[2], Global.name));
+                        Thread connector = new Thread(() => peer.Connector(int.Parse(boxValue[0]), boxValue[2], Global.name)); //Start a new Connector connecing to the port of the first box and the IP of the third box
                         connector.Start();
                     }
                 }
